@@ -1,4 +1,4 @@
-import GlobalData from "./Global";
+import GlobalData from "./Common/Global";
 
 cc.Class({
   extends: cc.Component,
@@ -9,6 +9,7 @@ cc.Class({
       type: cc.Label,
     },
     cardPrefab: cc.Prefab,
+    gameAvatarPrefab: cc.Prefab,
     // defaults, set visually when attaching this script to the Canvas
     text: "Hello, World!",
   },
@@ -16,10 +17,11 @@ cc.Class({
   // use this for initialization
   onLoad: function () {
     this.label.string = this.text;
-    this.loadCardAtlas().then(() => {
-      console.log("window.Global", GlobalData);
-      this.initTestCard();
-    });
+    // this.loadCardAtlas().then(() => {
+    //   console.log("window.Global", GlobalData);
+    //   this.initTestCard();
+    // });
+    this.initGameAvatar();
   },
 
   loadCardAtlas: function () {
@@ -39,6 +41,14 @@ cc.Class({
         }
       );
     });
+  },
+
+  initGameAvatar() {
+    const gameAvatar = cc.instantiate(this.gameAvatarPrefab);
+    this.node.addChild(gameAvatar);
+    gameAvatar.setPosition(cc.v2(0, 0));
+    gameAvatar.getComponent("GameAvatar").setPoint(3);
+    gameAvatar.getComponent("GameAvatar").setName("user");
   },
 
   initTestCard: function () {

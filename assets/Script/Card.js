@@ -1,4 +1,4 @@
-import GlobalData from "./Global";
+import GlobalData from "./Common/Global";
 
 cc.Class({
   extends: cc.Component,

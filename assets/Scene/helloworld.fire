@@ -180,7 +180,7 @@
       "array": [
         0,
         0,
-        366.32874580081756,
+        360.2665679743265,
         0,
         0,
         0,
@@ -581,6 +581,9 @@
     },
     "cardPrefab": {
       "__uuid__": "1a6ae81d-5a95-41cf-8320-5bd853d1847e"
+    },
+    "gameAvatarPrefab": {
+      "__uuid__": "cee34cf5-9be3-4de9-a7da-ef0fcf9e22a4"
     },
     "text": "Hello, World!",
     "_id": "dcGJ+cSA5D7qNtScKfLjJJ"
