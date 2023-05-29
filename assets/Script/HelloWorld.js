@@ -1,4 +1,4 @@
-const GlobalData = window.GlobalData;
+import GlobalData from "./Global";
 
 cc.Class({
   extends: cc.Component,

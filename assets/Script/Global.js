@@ -5,4 +5,4 @@ const GlobalData = {
 
 GlobalData.init();
 
-window.GlobalData = GlobalData;
+export default GlobalData;

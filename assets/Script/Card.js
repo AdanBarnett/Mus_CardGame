@@ -1,3 +1,5 @@
+import GlobalData from "./Global";
+
 cc.Class({
   extends: cc.Component,
 
@@ -19,11 +21,11 @@ cc.Class({
 
   onLoad() {
     this.backSprite.spriteFrame =
-      window.GlobalData.cardAtlas.getSpriteFrame("cards-back");
+      GlobalData.cardAtlas.getSpriteFrame("cards-back");
     this.highlightSprite.spriteFrame =
-      window.GlobalData.cardAtlas.getSpriteFrame("0highlight");
+      GlobalData.cardAtlas.getSpriteFrame("0highlight");
     this.groupSprite.spriteFrame =
-      window.GlobalData.cardAtlas.getSpriteFrame("0group");
+      GlobalData.cardAtlas.getSpriteFrame("0group");
 
     this.setSelected(false);
     this.setGroup(-1);
@@ -82,7 +84,7 @@ cc.Class({
 
     var spriteName = "cards-" + this._index;
     this.frontSprite.getComponent(cc.Sprite).spriteFrame =
-      window.GlobalData.cardAtlas.getSpriteFrame(spriteName);
+      GlobalData.cardAtlas.getSpriteFrame(spriteName);
 
     this.setFront(true);
   },
