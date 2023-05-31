@@ -49,6 +49,8 @@ cc.Class({
     gameAvatar.setPosition(cc.v2(0, 0));
     gameAvatar.getComponent("GameAvatar").setPoint(3);
     gameAvatar.getComponent("GameAvatar").setName("user");
+    gameAvatar.getComponent("GameAvatar").setProgress(1);
+    gameAvatar.getComponent("GameAvatar").showNotify("Hello");
   },
 
   initTestCard: function () {

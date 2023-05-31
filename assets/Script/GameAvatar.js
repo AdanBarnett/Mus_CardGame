@@ -1,5 +1,5 @@
 import { TIME_LIMIT } from "./Common/Constants";
-import { loadAvatar } from "./SpriteHelper";
+import { loadAvatar } from "./Common/SpriteHelper";
 
 cc.Class({
   extends: cc.Component,
@@ -86,6 +86,10 @@ cc.Class({
     this.showProgressBar(true);
   },
 
+  isShowingProgressBar() {
+    return this.progressRoot.active;
+  },
+
   showProgressBar(visible) {
     this.progressRoot.active = visible;
     if (visible) {
@@ -106,6 +110,10 @@ cc.Class({
   },
 
   update(dt) {
+    if (!this.isShowingProgressBar()) {
+      return;
+    }
+
     var progress = this.progressSprite.fillRange;
     if (progress > 0) {
       progress -= dt / this._timeLimit;
@@ -114,6 +122,8 @@ cc.Class({
 
       var sec = Math.ceil(progress * this._timeLimit);
       this.timerLabel.string = Math.floor(sec / 60) + ":" + (sec % 60);
+    } else {
+      this.showProgressBar(false);
     }
   },
 });
