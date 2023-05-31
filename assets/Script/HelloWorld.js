@@ -1,5 +1,3 @@
-import GlobalData from "./Common/GlobalData";
-
 cc.Class({
   extends: cc.Component,
 
@@ -22,25 +20,6 @@ cc.Class({
     //   this.initTestCard();
     // });
     this.initGameAvatar();
-  },
-
-  loadCardAtlas: function () {
-    return new Promise((resolve, reject) => {
-      cc.loader.loadRes(
-        "Card/cards_140x202",
-        cc.SpriteAtlas,
-        function (err, cardAtlas) {
-          if (err) {
-            console.log("Error loading card atlas", err);
-            reject();
-            return;
-          }
-          console.log("Loaded card atlas successfully!");
-          GlobalData.cardAtlas = cardAtlas;
-          resolve();
-        }
-      );
-    });
   },
 
   initGameAvatar() {

@@ -4,6 +4,7 @@ cc.Class({
   extends: cc.Component,
 
   properties: {
+    mainButton: cc.Button,
     frontSprite: cc.Sprite,
     backSprite: cc.Sprite,
     groupSprite: cc.Sprite,
@@ -29,6 +30,10 @@ cc.Class({
 
     this.setSelected(false);
     this.setGroup(-1);
+  },
+
+  setInteractable(interactable) {
+    this.mainButton.interactable = interactable;
   },
 
   isSelected() {
@@ -139,6 +144,10 @@ cc.Class({
       return true;
     }
     return false;
+  },
+
+  onUserClick() {
+    this.setSelected(!this.isSelected());
   },
 
   start() {},
