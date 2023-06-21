@@ -84,7 +84,7 @@ const FakeServer = {
     );
     ServerCommService.addRequestHandler(
       MESSAGE_TYPE.CS_DISCARD_CARDS,
-      this.discardPlayerCard
+      this.discardPlayerCard.bind(this)
     );
   },
 
@@ -209,8 +209,9 @@ const FakeServer = {
   },
 
   // Called when user discarded cards
-  discardPlayerCard(params, user) {
-    const cards = params;
+  discardPlayerCard(params, room) {
+    const user = params.user;
+    const cards = params.cards;
     if (!this.markUserReplied(user)) {
       return;
     }
@@ -220,9 +221,11 @@ const FakeServer = {
     );
     this.discardedCards.push(...cards);
 
-    if (this.isAllUsersReplied()) {
-      this.finishMusDiscard();
-    }
+    // TODO: Uncomment this code when we move to backend
+    // if (!this.isAllUsersReplied()) {
+    //   return;
+    // }
+    this.finishMusDiscard();
   },
 
   startBig() {},

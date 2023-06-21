@@ -98,5 +98,19 @@ cc.Class({
     this._playerAvatars[user].startCountdown();
   },
 
+  doDiscard(user) {
+    this.setActivePlayer(0);
+    this.playerActions.showDiscardButton(user);
+  },
+
+  getMySelectedCards() {
+    const cards = this.playerHand1.getSelectedCards();
+    return cards;
+  },
+
+  removeSelectedCards(cards) {
+    this.playerHand1.removeCards(cards);
+  },
+
   // update (dt) {},
 });

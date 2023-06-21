@@ -21,6 +21,10 @@ export const ClientCommService = {
       case MESSAGE_TYPE.SC_DO_MUS_CLAIM:
         GameScene.doMusClaim(params.user);
         break;
+
+      case MESSAGE_TYPE.SC_DO_MUS_DISCARD:
+        GameScene.doDiscard(0);
+        break;
     }
   },
 
@@ -30,5 +34,9 @@ export const ClientCommService = {
 
   sendMusClaim(user, mus) {
     this.send(MESSAGE_TYPE.CS_CLAIM_MUS, { user, mus }, 1);
+  },
+
+  sendDiscardCards(user, cards) {
+    this.send(MESSAGE_TYPE.CS_DISCARD_CARDS, { user, cards }, 1);
   },
 };

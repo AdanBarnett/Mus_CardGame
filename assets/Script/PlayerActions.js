@@ -1,4 +1,5 @@
 import { ClientCommService } from "./Common/CommServices";
+import { GameScene } from "./GameScene";
 
 export default cc.Class({
   extends: cc.Component,
@@ -62,6 +63,16 @@ export default cc.Class({
 
   onUserDiscardClick() {
     console.log("onUserDiscardClick");
+    var selectedCards = GameScene.getMySelectedCards();
+    if (selectedCards.length === 0) {
+      return;
+    }
+    ClientCommService.sendDiscardCards(
+      this._currentUser,
+      selectedCards.map((card) => card.getCardIndex())
+    );
+    GameScene.removeSelectedCards(selectedCards);
+    this.showButtonRoot(false);
   },
 
   onUserAcceptClick() {

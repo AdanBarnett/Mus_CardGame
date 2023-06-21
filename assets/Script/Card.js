@@ -78,7 +78,7 @@ cc.Class({
   },
 
   setCardIndex(index) {
-    this._index = index.toFixed(0);
+    this._index = index;
     this._color = index / 12;
     this._number = index % 12;
     if (this._number > 7) {
