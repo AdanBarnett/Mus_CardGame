@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "367b5ac5-7897-4e27-8298-e6be5bbbe83d",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 84,
+  "height": 49,
+  "platformSettings": {},
+  "subMetas": {
+    "envido-normal": {
+      "ver": "1.0.4",
+      "uuid": "5a4b95b5-0dcc-46ea-b444-4830bd1c2145",
+      "rawTextureUuid": "367b5ac5-7897-4e27-8298-e6be5bbbe83d",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 84,
+      "height": 49,
+      "rawWidth": 84,
+      "rawHeight": 49,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

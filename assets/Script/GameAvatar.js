@@ -1,7 +1,7 @@
 import { TIME_LIMIT } from "./Common/Constants";
 import { loadAvatar } from "./Common/SpriteHelper";
 
-cc.Class({
+export default cc.Class({
   extends: cc.Component,
 
   properties: {
@@ -78,12 +78,16 @@ cc.Class({
     this.pointLabel.string = point;
   },
 
-  setProgress(num, timeLimit) {
-    this.progressSprite.fillRange = num;
+  startCountdown(timeLimit) {
+    this.progressSprite.fillRange = 1;
     if (timeLimit) {
       this._timeLimit = timeLimit;
     }
     this.showProgressBar(true);
+  },
+
+  stopCountdown() {
+    this.showProgressBar(false);
   },
 
   isShowingProgressBar() {

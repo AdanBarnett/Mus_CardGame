@@ -1,6 +1,7 @@
 import TopBar from "./TopBar";
 import PlayerHand from "./PlayerHand";
 import PlayerActions from "./PlayerActions";
+import GameAvatar from "./GameAvatar";
 import { loadCardAtlas } from "./AssetLoader";
 
 export let GameScene;
@@ -10,6 +11,10 @@ cc.Class({
 
   properties: {
     topBar: TopBar,
+    playerAvatar1: GameAvatar,
+    playerAvatar2: GameAvatar,
+    playerAvatar3: GameAvatar,
+    playerAvatar4: GameAvatar,
     playerHand1: PlayerHand,
     playerHand2: PlayerHand,
     playerHand3: PlayerHand,
@@ -17,6 +22,7 @@ cc.Class({
     playerActions: PlayerActions,
 
     _playerHands: [],
+    _playerAvatars: [],
   },
 
   // LIFE-CYCLE CALLBACKS:
@@ -36,6 +42,17 @@ cc.Class({
       this.playerHand3,
       this.playerHand4,
     ];
+    this._playerAvatars = [
+      this.playerAvatar1,
+      this.playerAvatar2,
+      this.playerAvatar3,
+      this.playerAvatar4,
+    ];
+
+    for (let i = 0; i < this._playerAvatars.length; i++) {
+      this._playerAvatars[i].setName("Player " + (i + 1));
+      this._playerAvatars[i].setPoint(0);
+    }
 
     return;
     setTimeout(() => {
@@ -73,6 +90,12 @@ cc.Class({
 
   doMusClaim(user) {
     this.playerActions.showMusButtons(user);
+    this.setActivePlayer(user);
+  },
+
+  setActivePlayer(user) {
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    this._playerAvatars[user].startCountdown();
   },
 
   // update (dt) {},

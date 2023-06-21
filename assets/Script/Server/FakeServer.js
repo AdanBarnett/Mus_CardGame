@@ -1,5 +1,6 @@
 import { MESSAGE_TYPE } from "../Common/Messages";
 import { ClientCommService } from "../Common/CommServices";
+import { TIME_LIMIT } from "../Common/Constants";
 
 const ROUNDS = {
   MUS_CLAIM: 0,
@@ -11,7 +12,6 @@ const ROUNDS = {
   POINTS: 6,
 };
 
-const TIMEOUT = 30;
 const PLAYER_CNT = 4;
 const CARD_CNT = 4;
 
@@ -57,7 +57,7 @@ const TimeoutManager = {
     this.timeoutHandler = setTimeout(() => {
       callback();
       this.timeoutHandler = null;
-    }, TIMEOUT * 1000);
+    }, TIME_LIMIT * 1000);
   },
 
   clearNextTimeout() {
@@ -167,7 +167,7 @@ const FakeServer = {
     ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_CLAIM, { user }, user);
 
     TimeoutManager.setNextTimeout(() => {
-      this.claimMus(user, false);
+      this.claimMus({ mus: true, user });
     });
   },
 

@@ -7,7 +7,7 @@ export default cc.Class({
     buttonRoot: cc.Node,
     musButtonRoot: cc.Node,
     betButtonRoot: cc.Node,
-    betPopupRoot: cc.Node,
+    discardButtonRoot: cc.Node,
     betAmountLabel: cc.Label,
 
     _amount: 2,
@@ -17,15 +17,14 @@ export default cc.Class({
   // onLoad () {},
 
   start() {
-    this.showButtonRoot(false);
-    this.showBetPopup(false);
-    this.updateBetAmountLabel();
+    // this.showButtonRoot(false);
   },
 
   showMusButtons(user) {
     this._currentUser = user;
     this.musButtonRoot.active = true;
     this.betButtonRoot.active = false;
+    this.discardButtonRoot.active = false;
     this.showButtonRoot(true);
   },
 
@@ -33,6 +32,15 @@ export default cc.Class({
     this._currentUser = user;
     this.musButtonRoot.active = false;
     this.betButtonRoot.active = true;
+    this.discardButtonRoot.active = false;
+    this.showButtonRoot(true);
+  },
+
+  showDiscardButton(user) {
+    this._currentUser = user;
+    this.musButtonRoot.active = false;
+    this.betButtonRoot.active = false;
+    this.discardButtonRoot.active = true;
     this.showButtonRoot(true);
   },
 
@@ -52,7 +60,11 @@ export default cc.Class({
     this.showButtonRoot(false);
   },
 
-  onUserBetClick() {
+  onUserDiscardClick() {
+    console.log("onUserDiscardClick");
+  },
+
+  onUserAcceptClick() {
     console.log("onUserBetClick");
   },
 
@@ -60,18 +72,8 @@ export default cc.Class({
     console.log("onUserPassClick");
   },
 
-  onUserRaiseClick() {
+  onUserAllinClick() {
     console.log("onUserRaiseClick");
-    this.showBetPopup(true);
-  },
-
-  // Bet Popup Section
-  showBetPopup(show) {
-    this.betPopupRoot.active = show;
-  },
-
-  updateBetAmountLabel() {
-    this.betAmountLabel.string = this._amount;
   },
 
   onUserMinusClick() {
@@ -88,18 +90,12 @@ export default cc.Class({
     }
   },
 
-  onUserBetOkClick() {
+  updateBetAmountLabel() {
+    this.betAmountLabel.string = this._amount.toString();
+  },
+
+  onUserBetClick() {
     console.log("onUserBetOkClick", this._amount);
-    this.showBetPopup(false);
-  },
-
-  onUserOrdagoClick() {
-    console.log("onUserOrdagoClick");
-    this.showBetPopup(false);
-  },
-
-  onUserBackAlphaClick() {
-    this.showBetPopup(false);
   },
 
   // update (dt) {},
