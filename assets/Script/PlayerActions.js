@@ -1,3 +1,5 @@
+import { ClientCommService } from "./Common/CommServices";
+
 export default cc.Class({
   extends: cc.Component,
 
@@ -9,6 +11,7 @@ export default cc.Class({
     betAmountLabel: cc.Label,
 
     _amount: 2,
+    _currentUser: -1,
   },
 
   // onLoad () {},
@@ -19,13 +22,15 @@ export default cc.Class({
     this.updateBetAmountLabel();
   },
 
-  showMusButtons() {
+  showMusButtons(user) {
+    this._currentUser = user;
     this.musButtonRoot.active = true;
     this.betButtonRoot.active = false;
     this.showButtonRoot(true);
   },
 
-  showBetButtons() {
+  showBetButtons(user) {
+    this._currentUser = user;
     this.musButtonRoot.active = false;
     this.betButtonRoot.active = true;
     this.showButtonRoot(true);
@@ -37,10 +42,14 @@ export default cc.Class({
 
   onUserMusClick() {
     console.log("onUserMusClick");
+    ClientCommService.sendMusClaim(this._currentUser, true);
+    this.showButtonRoot(false);
   },
 
   onUserNoMusClick() {
     console.log("onUserNoMusClick");
+    ClientCommService.sendMusClaim(this._currentUser, false);
+    this.showButtonRoot(false);
   },
 
   onUserBetClick() {
