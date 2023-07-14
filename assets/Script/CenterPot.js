@@ -1,8 +1,8 @@
 import { ROUNDS } from "./Common/Messages";
 
-const SELECTED_COLOR = cc.Color.fromHex("#023e44");
-const NORMAL_COLOR = cc.Color.fromHex("#61c9ec");
-const MUS_COLOR = cc.Color.fromHex("#a9c8bf");
+const SELECTED_COLOR = new cc.Color(2, 62, 68);
+const NORMAL_COLOR = new cc.Color(97, 201, 236);
+const MUS_COLOR = new cc.Color(169, 200, 191);
 
 export default cc.Class({
   extends: cc.Component,
