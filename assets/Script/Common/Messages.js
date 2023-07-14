@@ -9,3 +9,13 @@ export const MESSAGE_TYPE = {
   CS_CLAIM_MUS: "CS_CLAIM_MUS",
   CS_DISCARD_CARDS: "CS_DISCARD_CARDS",
 };
+
+export const ROUNDS = {
+  MUS_CLAIM: 0,
+  MUS_DISCARD: 1,
+  BIG: 2,
+  SMALL: 3,
+  PAIRS: 4,
+  GAME: 5,
+  POINTS: 6,
+};

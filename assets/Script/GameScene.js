@@ -1,8 +1,10 @@
 import TopBar from "./TopBar";
 import PlayerHand from "./PlayerHand";
 import PlayerActions from "./PlayerActions";
+import CenterPot from "./CenterPot";
 import GameAvatar from "./GameAvatar";
 import { loadCardAtlas } from "./AssetLoader";
+import { ROUNDS } from "./Common/Messages";
 
 export let GameScene;
 
@@ -20,6 +22,7 @@ cc.Class({
     playerHand3: PlayerHand,
     playerHand4: PlayerHand,
     playerActions: PlayerActions,
+    centerPot: CenterPot,
 
     _playerHands: [],
     _playerAvatars: [],
@@ -35,6 +38,10 @@ cc.Class({
   start() {
     console.log("topbar", this.topBar);
     this.topBar.setUserBalance(100);
+
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.BIG);
+    }, 1000);
 
     this._playerHands = [
       this.playerHand1,

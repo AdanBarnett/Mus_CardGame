@@ -1,16 +1,6 @@
-import { MESSAGE_TYPE } from "../Common/Messages";
+import { MESSAGE_TYPE, ROUNDS } from "../Common/Messages";
 import { ClientCommService } from "../Common/CommServices";
 import { TIME_LIMIT } from "../Common/Constants";
-
-const ROUNDS = {
-  MUS_CLAIM: 0,
-  MUS_DISCARD: 1,
-  BIG: 2,
-  SMALL: 3,
-  PAIRS: 4,
-  GAME: 5,
-  POINTS: 6,
-};
 
 const PLAYER_CNT = 4;
 const CARD_CNT = 4;
