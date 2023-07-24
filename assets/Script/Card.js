@@ -106,14 +106,16 @@ cc.Class({
     this.node.angle = rotation;
   },
 
-  moveToPos(x, y) {
-    this.node.stopAllActions();
-    this.node.runAction(new cc.moveTo(0.5, x, y));
+  getPosition() {
+    return this.node.position;
   },
 
-  moveToPos(pos) {
+  moveToPos(d, x, y) {
+    // console.log(this.node);
     this.node.stopAllActions();
-    this.node.runAction(new cc.moveTo(0.5, pos.x, pos.y));
+    cc.tween(this.node)
+      .to(d, { x: x, y: y })
+      .start();
   },
 
   flipCard() {
@@ -147,10 +149,17 @@ cc.Class({
   },
 
   onUserClick() {
+    // console.log(this.getCardIndex());
     this.setSelected(!this.isSelected());
+    pos = this.getPosition();
+    if (this.isSelected() === true) {
+      this.moveToPos(0.1, pos.x, pos.y + 10);
+    } else {
+      this.moveToPos(0.1, pos.x, pos.y - 10);
+    };
   },
 
-  start() {},
+  start() { },
 
   // update (dt) {},
 });

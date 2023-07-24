@@ -3,6 +3,7 @@ export default cc.Class({
 
   properties: {
     cardPrefab: cc.Prefab,
+    cardDom: cc.Node,
 
     _cardComponents: [],
     _isMine: true,
@@ -26,10 +27,54 @@ export default cc.Class({
     this.addCards(cards);
   },
 
+  sortCards() {
+
+    // Create an array to store the children of the parent node
+    let childrenArray = [];
+
+    // Iterate through the children of the parent node and add them to the array
+    for (let i = 0; i < this.node.childrenCount; i++) {
+      let child = this.node.children[i];
+      childrenArray.push(child);
+    }
+
+    // Define a custom sorting function that compares the number parameter of two children
+    function compareChildren(child1, child2) {
+      let cardNum1 = child1.getComponent("Card").getCardIndex() % 12;
+      let cardNum2 = child2.getComponent("Card").getCardIndex() % 12;
+      let number1 = replaceByUser(cardNum1);
+      let number2 = replaceByUser(cardNum2);
+      return number2 - number1;  // Sort in decreasing order
+    }
+
+    function replaceByUser(num) {
+      if (num === 2) {
+        return 10.5;
+      } else if (num === 1) {
+        return 0.5;
+      } else {
+        return num;
+      }
+    }
+
+    // Sort the array using the custom sorting function
+    childrenArray.sort(compareChildren);
+
+    // Remove all the children from the parent node
+    this.node.removeAllChildren();
+
+    // Add the sorted children back to the parent node in the desired order
+    for (let i = 0; i < childrenArray.length; i++) {
+      let child = childrenArray[i];
+      this.node.addChild(child);
+    }
+  },
+
   addCards(cards) {
     cards.forEach((card) => {
       this.addCard(card);
     });
+    this.sortCards();
   },
 
   addCard(cardNumber) {
@@ -48,7 +93,16 @@ export default cc.Class({
       return;
     }
     this._cardComponents.splice(index, 1);
+    let card_copy = cc.instantiate(this.cardPrefab);
+    let worldPosition = card.node.convertToWorldSpaceAR(card.getPosition());
     card.node.destroy();
+    this.cardDom.addChild(card_copy);
+    const cardComponent = card_copy.getComponent("Card");
+    let startPosition = this.cardDom.convertToNodeSpaceAR(worldPosition);
+    card_copy.setPosition(startPosition);
+    let targetPosition = cc.v2(Math.floor(Math.random() * 80) - 40, Math.floor(Math.random() * 80) - 40);
+    cardComponent.flipCard();
+    cardComponent.moveToPos(0.5, targetPosition.x, targetPosition.y)
     console.log("Card removed successfully", this._cardComponents);
   },
 

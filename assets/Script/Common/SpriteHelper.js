@@ -12,3 +12,13 @@ export const loadAvatar = (sprite, path) => {
   texture.handleLoadedTexture();
   sprite.spriteFrame = new cc.SpriteFrame(texture);
 };
+
+export const loadCenterPotBackground = (sprite, name) => {
+  cc.loader.loadRes('Prefab/GameScene/CenterPot/' + name + '.png', cc.SpriteFrame, function (error, spriteFrame) {
+    if (error) {
+      console.error('Failed to load image:', error);
+      return;
+    }
+    sprite.spriteFrame = spriteFrame;
+  });
+};

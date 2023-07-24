@@ -15,6 +15,7 @@ export const ClientCommService = {
         break;
 
       case MESSAGE_TYPE.SC_ADD_CARDS:
+        console.log("rherhsherhserhhhhhhhhhhhhhhhhhh");
         GameScene.addPlayerCards(params.user, params.cards);
         break;
 
@@ -22,8 +23,56 @@ export const ClientCommService = {
         GameScene.doMusClaim(params.user);
         break;
 
+      case MESSAGE_TYPE.SC_DO_MUS_ALARM:
+        GameScene.doMusAlarm(params.user, params.mus);
+        break;
+
       case MESSAGE_TYPE.SC_DO_MUS_DISCARD:
-        GameScene.doDiscard(0);
+        GameScene.doDiscard(params.user);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_DISCARD_ALARM:
+        GameScene.doDiscardAlarm(params.user, params.cards);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_BIG:
+        GameScene.doBig(params.user, params.availableActions, params.state);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_SMALL:
+        GameScene.doSmall(params.user, params.availableActions, params.state);
+        break;
+
+      case MESSAGE_TYPE.SC_EVAL_PAIRS:
+        GameScene.evalPairs(params.user);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_PAIRS:
+        GameScene.doPairs(params.user, params.availableActions, params.state);
+        break;
+
+      case MESSAGE_TYPE.SC_EVAL_GAME:
+        GameScene.evalGame(params.user);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_GAME:
+        GameScene.doGame(params.user, params.availableActions, params.state);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_POINTS:
+        GameScene.doPoints(params.user, params.availableActions, params.state);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_END_ROUND:
+        GameScene.doEndRound(params.user, params.availableActions, params.state);
+        break;
+
+      case MESSAGE_TYPE.SC_DO_ALARM:
+        GameScene.doAlarm(params.user, params.content, params.coin);
+        break;
+
+      case MESSAGE_TYPE.SC_SEND_POINT:
+        GameScene.setPoints(params.users, params.coins);
         break;
     }
   },
@@ -38,5 +87,20 @@ export const ClientCommService = {
 
   sendDiscardCards(user, cards) {
     this.send(MESSAGE_TYPE.CS_DISCARD_CARDS, { user, cards }, 1);
+  },
+  sendAccept(user) {
+    this.send(MESSAGE_TYPE.CS_ACTION_ACCEPT, { user }, 1);
+  },
+  sendPass(user) {
+    this.send(MESSAGE_TYPE.CS_ACTION_PASS, { user }, 1);
+  },
+  sendEnvido(user, coin) {
+    this.send(MESSAGE_TYPE.CS_ACTION_ENVIDO, { user, coin }, 1);
+  },
+  sendBetMore(user, coin) {
+    this.send(MESSAGE_TYPE.CS_ACTION_BET_MORE, { user, coin }, 1);
+  },
+  sendAllIn(user) {
+    this.send(MESSAGE_TYPE.CS_ACTION_ALLIN, { user }, 1);
   },
 };

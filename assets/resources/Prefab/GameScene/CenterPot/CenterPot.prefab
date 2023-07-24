@@ -34,16 +34,19 @@
       },
       {
         "__id__": 17
+      },
+      {
+        "__id__": 20
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 20
+        "__id__": 30
       }
     ],
     "_prefab": {
-      "__id__": 21
+      "__id__": 31
     },
     "_opacity": 255,
     "_color": {
@@ -158,7 +161,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "Bg<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 2
@@ -265,7 +268,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "Mus Text<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 5
@@ -374,7 +377,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "Big Text<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 8
@@ -483,7 +486,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "Small Text<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 11
@@ -592,7 +595,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "Pairs Text<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 14
@@ -701,7 +704,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "Game Text<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 17
@@ -745,6 +748,374 @@
     "sync": false
   },
   {
+    "__type__": "cc.Node",
+    "_name": "bet-dom",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [
+      {
+        "__id__": 21
+      },
+      {
+        "__id__": 23
+      },
+      {
+        "__id__": 25
+      },
+      {
+        "__id__": 27
+      }
+    ],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 29
+    },
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 0,
+      "height": 0
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "big-dom",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 20
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 22
+    },
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 50,
+      "height": 50
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        52.192,
+        83.961,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "3887d121-2568-45e9-9d4d-334affbe3694"
+    },
+    "fileId": "e5RQG3yVFP3YqgTaep04aG",
+    "sync": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "small-dom",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 20
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 24
+    },
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 50,
+      "height": 50
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        86.23,
+        -52.191,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "3887d121-2568-45e9-9d4d-334affbe3694"
+    },
+    "fileId": "c5rtJR4F1FHJjz9lvR+yKY",
+    "sync": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "pairs-dom",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 20
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 26
+    },
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 50,
+      "height": 50
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        -49.922,
+        -77.153,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "3887d121-2568-45e9-9d4d-334affbe3694"
+    },
+    "fileId": "77jAEu5s5AXqO1QvqBbtlG",
+    "sync": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "game-dom",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 20
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 28
+    },
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 50,
+      "height": 50
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        -79.422,
+        54.461,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "3887d121-2568-45e9-9d4d-334affbe3694"
+    },
+    "fileId": "93sZKOfHNKsKHuKbu98bhe",
+    "sync": false
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "3887d121-2568-45e9-9d4d-334affbe3694"
+    },
+    "fileId": "f2riZiA7VPIL8N0mzEnDKc",
+    "sync": false
+  },
+  {
     "__type__": "d2d2aVszmpGc4qt4rdaC0B8",
     "_name": "",
     "_objFlags": 0,
@@ -770,8 +1141,33 @@
     "gameText": {
       "__id__": 18
     },
+    "betDom": {
+      "__id__": 20
+    },
+    "bigDom": {
+      "__id__": 21
+    },
+    "smallDom": {
+      "__id__": 23
+    },
+    "pairsDom": {
+      "__id__": 25
+    },
+    "gameDom": {
+      "__id__": 27
+    },
+    "coin1Prefab": {
+      "__uuid__": "6ea63f85-ca35-49bb-95aa-4f1b71349a9c"
+    },
+    "coin5Prefab": {
+      "__uuid__": "4e8704cd-d1e1-4578-b4a9-07f0b8fb8cf2"
+    },
     "_currentRound": -1,
     "_normalTexts": [],
+    "_bigCoins": [],
+    "_smallCoins": [],
+    "_pairsCoins": [],
+    "_gameCoins": [],
     "_id": ""
   },
   {

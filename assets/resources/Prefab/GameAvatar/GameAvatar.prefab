@@ -70,15 +70,15 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
-        0,
+        -329.879,
+        -270,
         0,
         0,
         0,
         0,
         1,
-        1,
-        1,
+        0.75,
+        0.75,
         1
       ]
     },
@@ -232,7 +232,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "layer-1<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 3
@@ -339,7 +339,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "user-panel-time-layer-1<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 6
@@ -484,7 +484,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "default_boy_avatar<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 11
@@ -662,7 +662,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "user-panel-layer2<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 15
@@ -769,7 +769,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "user-panel-time-layer2<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 18
@@ -914,7 +914,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "name-label<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 23
@@ -1023,7 +1023,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "point-label<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 26
@@ -1202,7 +1202,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "red-circle<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 30
@@ -1309,7 +1309,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "white-circle<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 33
@@ -1416,7 +1416,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "timer-label<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 36
@@ -1603,7 +1603,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "bg-item<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 41
@@ -1710,7 +1710,7 @@
   },
   {
     "__type__": "cc.Label",
-    "_name": "",
+    "_name": "notify-label<Label>",
     "_objFlags": 0,
     "node": {
       "__id__": 44

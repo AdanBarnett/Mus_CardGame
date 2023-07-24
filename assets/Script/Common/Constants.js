@@ -1,4 +1,4 @@
-export const TIME_LIMIT = 10;
+export const TIME_LIMIT = 15;
 
 export const INST_URL = "http://www.ludoteka.com/international_draughts.html";
 export const YOUTUBE_URL =
