@@ -1,6 +1,6 @@
 {
   "ver": "2.3.4",
-  "uuid": "a0f443a0-f305-4e73-9478-0dc4ff1695a9",
+  "uuid": "6ec3f00c-b874-4435-a175-74ca26a4fd85",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -13,8 +13,8 @@
   "subMetas": {
     "mus-version-ines_blue-coin-big": {
       "ver": "1.0.4",
-      "uuid": "bb94f593-7f64-44eb-9069-bbb15b8832fe",
-      "rawTextureUuid": "a0f443a0-f305-4e73-9478-0dc4ff1695a9",
+      "uuid": "a2878d09-9065-4491-b854-1a1f163e98a6",
+      "rawTextureUuid": "6ec3f00c-b874-4435-a175-74ca26a4fd85",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

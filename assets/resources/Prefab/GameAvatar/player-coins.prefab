@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "red-coin-1",
+    "_name": "player-coins",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -36,8 +36,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 23,
-      "height": 23
+      "width": 0,
+      "height": 0
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -48,8 +48,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        172,
-        292,
+        -256.571,
+        -270.705,
         0,
         0,
         0,
@@ -74,35 +74,21 @@
     "_id": ""
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "851faLDuW1KSooAJ3G/is6g",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "_materials": [
-      {
-        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
-      }
-    ],
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "75fa7eec-f3e6-49c0-868a-436284cb4642"
+    "coin1Prefab": {
+      "__uuid__": "afb87990-1986-4d4d-a3b3-bd09dd606e8e"
     },
+    "coin5Prefab": {
+      "__uuid__": "23224914-a0ed-42ce-9164-eec5649d466b"
+    },
+    "_coins": [],
     "_type": 0,
-    "_sizeMode": 1,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_atlas": null,
     "_id": ""
   },
   {
@@ -111,9 +97,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "afb87990-1986-4d4d-a3b3-bd09dd606e8e"
+      "__uuid__": "f49461a5-ab9d-43e1-9dba-1668b4e1cb32"
     },
-    "fileId": "90XbSfPA9MzKVkci4ctctU",
+    "fileId": "aeDQW+Yc1E/7Uo9TiTVfAm",
     "sync": false
   }
 ]

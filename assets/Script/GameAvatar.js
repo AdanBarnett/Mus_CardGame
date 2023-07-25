@@ -33,7 +33,7 @@ export default cc.Class({
     this.showProgressBar(false);
   },
 
-  start() {},
+  start() { },
 
   showNotify(str) {
     var self = this;
@@ -52,8 +52,8 @@ export default cc.Class({
   setType(type) {
     this._type = type;
     if (type == 1) {
-      this.notifyRoot.setScale(-1, 1);
-      this.notifyLabel.node.setScale(-1, 1);
+      this.notifyRoot.setScale(-1, -1);
+      this.notifyLabel.node.setScale(-1, -1);
     } else {
       this.notifyRoot.setScale(1, 1);
       this.notifyLabel.node.setScale(1, 1);
@@ -76,6 +76,11 @@ export default cc.Class({
   setPoint(point) {
     console.log("Setting points", point);
     this.pointLabel.string = point;
+  },
+
+  addPoint(point) {
+    console.log("Adding points", point);
+    this.pointLabel.string = parseInt(this.pointLabel.string) + point;
   },
 
   startCountdown(timeLimit) {

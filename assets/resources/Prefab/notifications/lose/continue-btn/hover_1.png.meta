@@ -1,6 +1,6 @@
 {
   "ver": "2.3.4",
-  "uuid": "e3bddf6c-f4e6-4af1-9f0c-0fec6777efbb",
+  "uuid": "5ddfd6a3-4f48-405c-a9ba-325dead9a5a7",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -13,8 +13,8 @@
   "subMetas": {
     "hover_1": {
       "ver": "1.0.4",
-      "uuid": "ccc7420f-1d6b-4e72-9e87-33c92f424edc",
-      "rawTextureUuid": "e3bddf6c-f4e6-4af1-9f0c-0fec6777efbb",
+      "uuid": "e6505769-7b3b-4f08-906d-db682e56c989",
+      "rawTextureUuid": "5ddfd6a3-4f48-405c-a9ba-325dead9a5a7",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

@@ -31,6 +31,10 @@ export default cc.Class({
     _smallCoins: [],
     _pairsCoins: [],
     _gameCoins: [],
+    _bigPosition: null,
+    _smallPosition: null,
+    _pairsPosition: null,
+    _gamePosition: null,
   },
 
   onLoad() { },
@@ -42,6 +46,10 @@ export default cc.Class({
       this.pairsText,
       this.gameText,
     ];
+    this._bigPosition = this.bigDom.convertToWorldSpaceAR(this.bigDom.getPosition());
+    this._smallPosition = this.smallDom.convertToWorldSpaceAR(this.smallDom.getPosition());
+    this._pairsPosition = this.pairsDom.convertToWorldSpaceAR(this.pairsDom.getPosition());
+    this._gamePosition = this.gameDom.convertToWorldSpaceAR(this.gameDom.getPosition());
   },
 
   setCurrentRound(round) {
@@ -82,6 +90,10 @@ export default cc.Class({
       loadCenterPotBackground(this.bgImage, "4-game");
       this.gameText.node.color = SELECTED_COLOR;
       this.gameText.string = "Punto";
+    } else if (round === ROUNDS.POINTS) {
+      loadCenterPotBackground(this.bgImage, "empty.png");
+      this.gameText.node.color = SELECTED_COLOR;
+      this.gameText.string = "Punto";
     }
   },
 
@@ -117,7 +129,7 @@ export default cc.Class({
       this._gameCoins.push(coin);
     }
     coin.setPosition(startPosition);
-    let targetPosition = cc.v2(Math.floor(Math.random() * 10) * 3, Math.floor(Math.random() * 10) * 3);
+    let targetPosition = cc.v2(Math.floor(Math.random() * 10) * 4 - 20, Math.floor(Math.random() * 10) * 4 - 20);
     coin.stopAllActions();
     cc.tween(coin)
       .to(0.5, { x: targetPosition.x, y: targetPosition.y })
@@ -144,23 +156,30 @@ export default cc.Class({
     console.log("Card removed successfully", this._cardComponents);
   },
 
-  removeCoins() {
-    if (this._currentRound === ROUNDS.BIG) {
+  removeCoins(state) {
+    let s = state ? state : this._currentRound;
+    let worldPosition;
+    if (s === ROUNDS.BIG) {
       this.bigDom.removeAllChildren();
-      this._bigCoins=[];
+      this._bigCoins = [];
+      worldPosition = this.bigDom.convertToWorldSpaceAR(this.bigDom.getPosition());
     }
-    else if (this._currentRound === ROUNDS.SMALL) {
+    else if (s === ROUNDS.SMALL) {
       this.smallDom.removeAllChildren();
-      this._smallCoins=[];
+      this._smallCoins = [];
+      worldPosition = this.smallDom.convertToWorldSpaceAR(this.smallDom.getPosition());
     }
-    else if (this._currentRound === ROUNDS.PAIRS) {
+    else if (s === ROUNDS.PAIRS) {
       this.pairsDom.removeAllChildren();
-      this._pairsCoins=[];
+      this._pairsCoins = [];
+      worldPosition = this.pairsDom.convertToWorldSpaceAR(this.pairsDom.getPosition());
     }
-    else if (this._currentRound === ROUNDS.GAME || this._currentRound === ROUNDS.POINTS) {
+    else if (s === ROUNDS.GAME || s === ROUNDS.POINTS) {
       this.gameDom.removeAllChildren();
-      this._gameCoins=[];
+      this._gameCoins = [];
+      worldPosition = this.gameDom.convertToWorldSpaceAR(this.gameDom.getPosition());
     }
+    return worldPosition;
   },
 
   // update (dt) {},

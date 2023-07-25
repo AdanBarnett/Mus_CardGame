@@ -175,7 +175,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "dfb34788-1d9b-4a9c-9ef7-e4b4dea66b88"
+      "__uuid__": "2dfb5106-5e4c-4a5f-9c75-a925eda88a0d"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -229,7 +229,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 85.61,
+      "width": 68.97,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -280,8 +280,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "MUS?",
-    "_N$string": "MUS?",
+    "_string": "MUS",
+    "_N$string": "MUS",
     "_fontSize": 38,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -1157,10 +1157,10 @@
       "__id__": 27
     },
     "coin1Prefab": {
-      "__uuid__": "6ea63f85-ca35-49bb-95aa-4f1b71349a9c"
+      "__uuid__": "afb87990-1986-4d4d-a3b3-bd09dd606e8e"
     },
     "coin5Prefab": {
-      "__uuid__": "4e8704cd-d1e1-4578-b4a9-07f0b8fb8cf2"
+      "__uuid__": "23224914-a0ed-42ce-9164-eec5649d466b"
     },
     "_currentRound": -1,
     "_normalTexts": [],

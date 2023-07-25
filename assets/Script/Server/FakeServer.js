@@ -1,6 +1,6 @@
 import { MESSAGE_TYPE, ROUNDS } from "../Common/Messages";
 import { ClientCommService } from "../Common/CommServices";
-import { TIME_LIMIT } from "../Common/Constants";
+import { TIME_LIMIT, COINS_LIMIT } from "../Common/Constants";
 
 const PLAYER_CNT = 4;
 const CARD_CNT = 4;
@@ -171,13 +171,11 @@ const FakeServer = {
   dealer: 0,
   repliedUsers: [],
   bet_coins: [0, 0, 0, 0],
-  add_coin: 0,
   total_coins: [0, 0, 0, 0],
-  instant_coins: 0,
+  // the score of round (e: [1, 0] )
   round_score: [0, 0],
   usersState_inCategory: [],
   endCategory: false,
-  winnerOfCategory: 0,
   stateCategory: "",
   prevAvAction: null,
   coins_history: [
@@ -223,11 +221,24 @@ const FakeServer = {
   },
 
   startGame() {
-    this.startRound();
+    this.startMission();
   },
 
-  startRound() {
+  startMission() {
     this.dealer = 0;
+    this.deckCards = [];
+    this.discardedCards = [];
+    this.playerCards = [];
+    this.repliedUsers = [];
+    this.bet_coins = [0, 0, 0, 0];
+    this.total_coins = [0, 0, 0, 0]
+    this.coins_history = [
+      [{ ...item_history }, { ...item_history }],
+      [{ ...item_history }, { ...item_history }],
+      [{ ...item_history }, { ...item_history }],
+      [{ ...item_history }, { ...item_history }],
+      [{ ...item_history }, { ...item_history }],
+    ];
     this._generateDeck();
     for (let i = 0; i < PLAYER_CNT; i++) {
       this.playerCards[i] = [];
@@ -404,7 +415,6 @@ const FakeServer = {
     this.endCategory = false;
     this.stateCategory = "start";
     this.bet_coins = [0, 0, 0, 0];
-    this.add_coin = 0;
     this.envidoState = false;
     this.repliedUsers = [];
     this.winnerOfCategory = 0;
@@ -522,23 +532,26 @@ const FakeServer = {
           this.currRound = ROUNDS.POINTS;
         } else if (this.availableUsersForGame.length === 1) {
           // this.calcCoinInCategory();
-          this.currRound = ROUNDS.END;
+          this.currRound = ROUNDS.SHAREPOINTS;
         } else if (this.availableUsersForGame.length === 2) {
           if ((this.availableUsersForGame[0] + this.availableUsersForGame[1]) % 2 === 1) {
             this.currRound = ROUNDS.GAME;
           }
           else {
             // this.calcCoinInCategory();
-            this.currRound = ROUNDS.END;
+            this.currRound = ROUNDS.SHAREPOINTS;
           }
         } else {
           this.currRound = ROUNDS.GAME;
         }
         break;
       case ROUNDS.GAME:
-        this.currRound = ROUNDS.END;
+        this.currRound = ROUNDS.SHAREPOINTS;
         break;
       case ROUNDS.POINTS:
+        this.currRound = ROUNDS.SHAREPOINTS;
+        break;
+      case ROUNDS.SHAREPOINTS:
         this.currRound = ROUNDS.END;
         break;
       case ROUNDS.END:
@@ -643,20 +656,36 @@ const FakeServer = {
       case ROUNDS.POINTS:
         ServerCommService.send(MESSAGE_TYPE.SC_DO_POINTS, params, user);
         break;
+      case ROUNDS.SHAREPOINTS:
+        params = { user, coins_history: this.coins_history, total_coints: this.total_coins };
+        ServerCommService.send(MESSAGE_TYPE.SC_SHARE_POINT, params, user);
+        // this.startCategory();
+        break;
       case ROUNDS.END:
         ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
         break;
+
     }
-    if (this.currRound != ROUNDS.END) {
+    if (this.currRound !== ROUNDS.END) {
       if ([ROUNDS.EVAL_GAME, ROUNDS.EVAL_PAIRS].includes(this.currRound)) {
         TimeoutManager.setNextTimeout(() => {
           this.eval({ user }, 1);
+        }, 2);
+      }
+      else if (this.currRound === ROUNDS.SHAREPOINTS) {
+        TimeoutManager.setNextTimeout(() => {
+          this.sharePoints({ user, coins_history: this.coins_history, total_coints: this.total_coins }, 1);
         }, 5);
-      } else {
+      }
+      else {
         TimeoutManager.setNextTimeout(() => {
           this.pass({ user }, 1);
         });
       }
+    } else {
+      TimeoutManager.setNextTimeout(() => {
+        this.nextMission();
+      });
     }
   },
 
@@ -683,6 +712,32 @@ const FakeServer = {
     } else {
       this.askAction((user + 1) % 4);
     }
+  },
+
+  // share rest coins to users
+  sharePoints(params, room) {
+    console.log("share rest coins to userse");
+    TimeoutManager.clearNextTimeout();
+    this.startCategory();
+    // let user = params.user;
+    // // this.stateCategory = "eval";
+    // // this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_PASS;
+    // // this.usersState_inCategory[user].coin = 0;
+    // if (!this.markUserReplied(user)) {
+    //   return;
+    // }
+    // // let users = (this.currRound === ROUNDS.EVAL_PAIRS) ? [...this.availableUsers] : [...this.availableUsersForGame];
+    // // if (users.includes(user)) {
+    // this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_SHARE_POINT, params, 1);
+    // // }
+    // // else {
+    // // this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "No" }, 1);
+    // // }
+    // if (this.isAllUsersReplied()) {
+    //   this.startCategory();
+    // } else {
+    //   this.askAction((user + 1) % 4);
+    // }
   },
 
   // get winning team in category
@@ -877,7 +932,8 @@ const FakeServer = {
           MESSAGE_TYPE.SC_SEND_POINT,
           {
             users: [winner, winner + 2],
-            coins: this.total_coins
+            coins: this.total_coins,
+            state: this.currRound,
           },
           [0, 1, 2, 3]
         );
@@ -932,7 +988,6 @@ const FakeServer = {
     this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_ENVIDO;
     this.usersState_inCategory[user].coin = coin;
     this.bet_coins[user] += coin;
-    this.add_coin += coin;
     this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "Envido " + ((coin > 2) ? coin : ""), coin }, 1);
     if (this.isEndCategory(user)) {
       // doesn't come in here
@@ -956,7 +1011,6 @@ const FakeServer = {
     this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_BET_MORE;
     this.usersState_inCategory[user].coin = coin;
     this.bet_coins[user] += coin;
-    this.add_coin += coin;
     this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: ((coin > 1) ? coin : "") + " more", coin }, 1);
     if (this.isEndCategory(user)) {
       // doesn't come in here
@@ -990,6 +1044,10 @@ const FakeServer = {
       this.askAction(this.setNextUser(user));
     }
   },
+
+  nextMission() {
+    this.startMission();
+  }
 };
 
 FakeServer.initHandlers();

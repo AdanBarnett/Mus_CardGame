@@ -1,6 +1,6 @@
 {
   "ver": "2.3.4",
-  "uuid": "b12af1cf-5719-4896-9b14-9775ab17f4a4",
+  "uuid": "6a6e52e2-75ab-4551-be37-e854bd8b0d4d",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -13,8 +13,8 @@
   "subMetas": {
     "press_1": {
       "ver": "1.0.4",
-      "uuid": "17c75c53-8d4d-4746-96b4-39ca68f6eb96",
-      "rawTextureUuid": "b12af1cf-5719-4896-9b14-9775ab17f4a4",
+      "uuid": "3927ea89-b2e9-4ea8-a874-fc2393d80390",
+      "rawTextureUuid": "6a6e52e2-75ab-4551-be37-e854bd8b0d4d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

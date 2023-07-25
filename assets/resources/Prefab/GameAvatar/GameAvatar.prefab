@@ -1500,8 +1500,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
+      "width": 100,
+      "height": 30
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1512,8 +1512,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
-        0,
+        35.739,
+        124.388,
         0,
         0,
         0,
@@ -1564,8 +1564,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 582,
-      "height": 192
+      "width": 230,
+      "height": 80
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1576,15 +1576,15 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        40,
-        30,
+        0,
+        0,
         0,
         0,
         0,
         0,
         1,
-        0.1,
-        0.1,
+        1,
+        1,
         1
       ]
     },
@@ -1617,10 +1617,10 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "d3a4c3f7-48d4-4f7b-af56-2da790e3d139"
+      "__uuid__": "3be2aa97-b2be-442e-b182-d14b24c2cd21"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -1664,15 +1664,15 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 99,
-      "g": 40,
-      "b": 10,
+      "r": 2,
+      "g": 62,
+      "b": 68,
       "a": 255
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55,
-      "height": 10
+      "width": 220,
+      "height": 50
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1683,8 +1683,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        40,
-        33,
+        0,
+        5.391,
         0,
         0,
         0,
@@ -1722,10 +1722,10 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "Notify",
-    "_N$string": "Notify",
-    "_fontSize": 10,
-    "_lineHeight": 10,
+    "_string": "Lorem ewihnv khjwo wefw, wfewf, ffsf",
+    "_N$string": "Lorem ewihnv khjwo wefw, wfewf, ffsf",
+    "_fontSize": 15,
+    "_lineHeight": 18,
     "_enableWrapText": true,
     "_N$file": {
       "__uuid__": "ec3dd456-bcfc-435a-8fc4-34b3134901d3"

@@ -63,6 +63,10 @@ export const ClientCommService = {
         GameScene.doPoints(params.user, params.availableActions, params.state);
         break;
 
+      case MESSAGE_TYPE.SC_SHARE_POINT:
+        GameScene.sharePoints(params.user, params.coins_history, params.total_coins);
+        break;
+
       case MESSAGE_TYPE.SC_DO_END_ROUND:
         GameScene.doEndRound(params.user, params.availableActions, params.state);
         break;
@@ -72,7 +76,7 @@ export const ClientCommService = {
         break;
 
       case MESSAGE_TYPE.SC_SEND_POINT:
-        GameScene.setPoints(params.users, params.coins);
+        GameScene.setPoints(params.users, params.coins, params.state);
         break;
     }
   },

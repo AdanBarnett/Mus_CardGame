@@ -94,15 +94,18 @@ export default cc.Class({
     }
     this._cardComponents.splice(index, 1);
     let card_copy = cc.instantiate(this.cardPrefab);
-    let worldPosition = card.node.convertToWorldSpaceAR(card.getPosition());
+    let worldPosition = this.node.convertToWorldSpaceAR(card.getPosition());
     card.node.destroy();
+    // this.cardDom.addChild(card_copy);
+    card_copy.setPosition(worldPosition.x, worldPosition.y);
     this.cardDom.addChild(card_copy);
     const cardComponent = card_copy.getComponent("Card");
     let startPosition = this.cardDom.convertToNodeSpaceAR(worldPosition);
     card_copy.setPosition(startPosition);
     let targetPosition = cc.v2(Math.floor(Math.random() * 80) - 40, Math.floor(Math.random() * 80) - 40);
     cardComponent.flipCard();
-    cardComponent.moveToPos(0.5, targetPosition.x, targetPosition.y)
+    cardComponent.moveToPos(0.5, targetPosition.x, targetPosition.y);
+    // console.log(worldPosition, startPosition, targetPosition);
     console.log("Card removed successfully", this._cardComponents);
   },
 

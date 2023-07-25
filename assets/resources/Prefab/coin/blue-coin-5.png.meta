@@ -1,6 +1,6 @@
 {
   "ver": "2.3.4",
-  "uuid": "7f9eca04-cbbd-4948-9ffa-1e4f82f0fde2",
+  "uuid": "60cef3c2-cb65-410f-b051-af003122cd47",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -13,8 +13,8 @@
   "subMetas": {
     "blue-coin-5": {
       "ver": "1.0.4",
-      "uuid": "9028647d-135d-47a1-9891-ac18cfba50f4",
-      "rawTextureUuid": "7f9eca04-cbbd-4948-9ffa-1e4f82f0fde2",
+      "uuid": "b59edda2-c50c-43f0-af7b-ae10965d45bb",
+      "rawTextureUuid": "60cef3c2-cb65-410f-b051-af003122cd47",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

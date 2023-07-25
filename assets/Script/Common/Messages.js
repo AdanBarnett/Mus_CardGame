@@ -15,7 +15,7 @@ export const MESSAGE_TYPE = {
   SC_DO_END_ROUND: "SC_DO_END_ROUND",
   SC_EVAL_PAIRS: "SC_EVAL_PAIRS",
   SC_EVAL_GAME: "SC_EVAL_GAME",
-  SC_SEND_POINT : "SC_SEND_POINT",
+  SC_SHARE_POINT : "SC_SHARE_POINT",
 
   // Messsages from Client to Server
   CS_CLAIM_MUS: "CS_CLAIM_MUS",
@@ -37,5 +37,6 @@ export const ROUNDS = {
   EVAL_GAME: 4.5,
   GAME: 5,
   POINTS: 6,
-  END: 7,
+  SHAREPOINTS: 7,
+  END: 8,
 };
