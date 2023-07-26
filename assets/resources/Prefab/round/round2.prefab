@@ -89,7 +89,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "87db393a-f9ba-47e1-a426-ceeb44ef4339"
+      "__uuid__": "0b0e7890-e99c-4e2b-83b1-fba7bf47371d"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -111,7 +111,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "355192cd-a43a-4f02-b0a2-02454c2b4d3d"
     },
     "fileId": "48bQ+dMwFNTrOiPGlL88CU",
     "sync": false

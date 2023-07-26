@@ -28,10 +28,13 @@
     "_components": [
       {
         "__id__": 145
+      },
+      {
+        "__id__": 146
       }
     ],
     "_prefab": {
-      "__id__": 146
+      "__id__": 147
     },
     "_opacity": 255,
     "_color": {
@@ -5375,6 +5378,68 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 0,
     "_originalHeight": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "d0c7fa22WJG8LYt1Wqgksd0",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "title": {
+      "__id__": 8
+    },
+    "team1_big": {
+      "__id__": 30
+    },
+    "team2_big": {
+      "__id__": 97
+    },
+    "team1_small": {
+      "__id__": 33
+    },
+    "team2_small": {
+      "__id__": 100
+    },
+    "team1_pairs": {
+      "__id__": 35
+    },
+    "team2_pairs": {
+      "__id__": 102
+    },
+    "team1_game": {
+      "__id__": 38
+    },
+    "team2_game": {
+      "__id__": 105
+    },
+    "team1_round": {
+      "__id__": 62
+    },
+    "team2_round": {
+      "__id__": 109
+    },
+    "team1_add": {
+      "__id__": 65
+    },
+    "team2_add": {
+      "__id__": 112
+    },
+    "team1_total": {
+      "__id__": 68
+    },
+    "team2_total": {
+      "__id__": 115
+    },
+    "score_group": {
+      "__uuid__": "9f286be1-97aa-4a92-aa90-cb85cf390dbe"
+    },
+    "_t1p": [],
+    "_t2p": [],
+    "_t1g": [],
+    "_t2g": [],
     "_id": ""
   },
   {

@@ -27,11 +27,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 29
+        "__id__": 30
       }
     ],
     "_prefab": {
-      "__id__": 30
+      "__id__": 31
     },
     "_opacity": 255,
     "_color": {
@@ -241,11 +241,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 27
+        "__id__": 28
       }
     ],
     "_prefab": {
-      "__id__": 28
+      "__id__": 29
     },
     "_opacity": 255,
     "_color": {
@@ -637,10 +637,13 @@
     "_components": [
       {
         "__id__": 24
+      },
+      {
+        "__id__": 26
       }
     ],
     "_prefab": {
-      "__id__": 26
+      "__id__": 27
     },
     "_opacity": 255,
     "_color": {
@@ -884,7 +887,9 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": null,
+    "_spriteFrame": {
+      "__uuid__": "7a347e7d-c00f-472f-b8b3-bde625d96346"
+    },
     "_type": 1,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -1002,12 +1007,24 @@
       "b": 120,
       "a": 200
     },
-    "_N$normalSprite": null,
-    "_N$pressedSprite": null,
-    "pressedSprite": null,
-    "_N$hoverSprite": null,
-    "hoverSprite": null,
-    "_N$disabledSprite": null,
+    "_N$normalSprite": {
+      "__uuid__": "7a347e7d-c00f-472f-b8b3-bde625d96346"
+    },
+    "_N$pressedSprite": {
+      "__uuid__": "4fbfd500-d580-4c36-ab88-4e846ee34c77"
+    },
+    "pressedSprite": {
+      "__uuid__": "4fbfd500-d580-4c36-ab88-4e846ee34c77"
+    },
+    "_N$hoverSprite": {
+      "__uuid__": "e6505769-7b3b-4f08-906d-db682e56c989"
+    },
+    "hoverSprite": {
+      "__uuid__": "e6505769-7b3b-4f08-906d-db682e56c989"
+    },
+    "_N$disabledSprite": {
+      "__uuid__": "7a347e7d-c00f-472f-b8b3-bde625d96346"
+    },
     "_N$target": {
       "__id__": 17
     },
@@ -1015,11 +1032,29 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
+    "target": {
+      "__id__": 16
+    },
     "component": "",
-    "_componentId": "",
-    "handler": "",
+    "_componentId": "af99axheCZB46R1izDokFu8",
+    "handler": "onUserClickButton",
     "customEventData": ""
+  },
+  {
+    "__type__": "af99axheCZB46R1izDokFu8",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 16
+    },
+    "_enabled": true,
+    "button": {
+      "__id__": 24
+    },
+    "parent": {
+      "__id__": 1
+    },
+    "_id": ""
   },
   {
     "__type__": "cc.PrefabInfo",

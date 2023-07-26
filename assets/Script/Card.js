@@ -151,7 +151,7 @@ cc.Class({
   onUserClick() {
     // console.log(this.getCardIndex());
     this.setSelected(!this.isSelected());
-    pos = this.getPosition();
+    const pos = this.getPosition();
     if (this.isSelected() === true) {
       this.moveToPos(0.1, pos.x, pos.y + 10);
     } else {

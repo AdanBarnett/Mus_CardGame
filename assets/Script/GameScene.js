@@ -7,6 +7,7 @@ import { loadCardAtlas } from "./AssetLoader";
 import { MESSAGE_TYPE, ROUNDS } from "./Common/Messages";
 import GlobalData from "./Common/GlobalData";
 import PlayerCoins from "./PlayerCoins";
+import EndContainer from "./EndContainer";
 
 export let GameScene;
 
@@ -32,13 +33,22 @@ cc.Class({
     playerActions: PlayerActions,
     centerPot: CenterPot,
     cardDom: cc.Node,
-    endRound: cc.Node,
+    endRound: EndContainer,
     hand: cc.Node,
+    mission1: cc.Node,
+    mission2: cc.Node,
+    mission3: cc.Node,
+    mission4: cc.Node,
+    round1: cc.Prefab,
+    round2: cc.Prefab,
+    lose: cc.Node,
+    win: cc.Node,
     aaa: cc.Node,
 
     _playerHands: [],
     _playerAvatars: [],
     _playerCoins: [],
+    _missions: [],
   },
 
   // LIFE-CYCLE CALLBACKS:
@@ -74,10 +84,19 @@ cc.Class({
         this.playerCoin3,
         this.playerCoin4,
       ];
+      this._missions = [
+        this.mission1,
+        this.mission2,
+        this.mission3,
+        this.mission4,
+      ];
       for (let i = 0; i < this._playerAvatars.length; i++) {
         this._playerAvatars[i].setName("Player " + (i + 1));
         this._playerAvatars[i].setPoint(0);
         this._playerAvatars[i].setType((i === 0 || i === 3) ? 0 : 1);
+      }
+      for (let i = 0; i < this._missions.length; i++) {
+        this._missions[i].removeAllChildren();
       }
       this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
     } else {
@@ -95,7 +114,7 @@ cc.Class({
   doMusClaim(user) {
     this.centerPot.setCurrentRound(ROUNDS.MUS_CLAIM);
     // this.playerActions.showMusButtons();
-    this.endRound.active = false;
+    this.endRound.node.active = false;
     this.playerActions.showMusButtons(user);
     this.setActivePlayer(user);
   },
@@ -144,6 +163,7 @@ cc.Class({
     this._playerHands[user].removeCards(cards);
   },
 
+  // add betted coins to board
   doAlarm(user, content, coin) {
     console.log("alarm!!!!!!!!!!!!!!!!!!!!!!!!");
     this._playerAvatars[user].showNotify(content);
@@ -152,8 +172,10 @@ cc.Class({
     }
   },
 
+  // set total coins to winner when instant
   setPoints(users, coins, state) {
     let worldPosition = this.centerPot.removeCoins();
+    let type;
     users.forEach((user) => {
       if (user === 0 || user === 3) {
         type = 0;
@@ -173,7 +195,6 @@ cc.Class({
     this.setActivePlayer(user);
   },
   doSmall(user, availableActions, state) {
-    // this.cardDom.node.removeAllChildren();
     this.centerPot.setCurrentRound(ROUNDS.SMALL);
     this.playerActions.showBetButtons(user, availableActions, state);
     this.setActivePlayer(user);
@@ -183,7 +204,6 @@ cc.Class({
     this.setActivePlayer(user);
   },
   doPairs(user, availableActions, state) {
-    // this.cardDom.node.removeAllChildren();
     this.centerPot.setCurrentRound(ROUNDS.PAIRS);
     this.playerActions.showBetButtons(user, availableActions, state);
     this.setActivePlayer(user);
@@ -193,99 +213,39 @@ cc.Class({
     this.setActivePlayer(user);
   },
   doGame(user, availableActions, state) {
-    // this.cardDom.node.removeAllChildren();
     this.centerPot.setCurrentRound(ROUNDS.GAME);
     this.playerActions.showBetButtons(user, availableActions, state);
     this.setActivePlayer(user);
   },
+  // set total coins to winner when end
   sharePoints(user, coins_history, total_coins) {
     this.centerPot.setCurrentRound(ROUNDS.SHAREPOINTS);
     // this.setActivePlayer(user);
-    let users = [];
-    let big = this.centerPot._bigCoins.length;
-    let small = this.centerPot._smallCoins.length;
-    let pairs = this.centerPot._pairsCoins.length;
-    let game = this.centerPot._gameCoins.length;
-    if (big > 0) {
-      if (coins_history[0][0].end > 0) {
-        users = [0, 2];
-        big += coins_history[0][0].end;
+    let users = [0, 1, 2, 3];
+    // let big = this.centerPot._bigCoins.length;
+    // let small = this.centerPot._smallCoins.length;
+    // let pairs = this.centerPot._pairsCoins.length;
+    // let game = this.centerPot._gameCoins.length;
+    let worldPosition = this.node.convertToWorldSpaceAR(this.node.getPosition());;
+    this.centerPot.removeCoins(ROUNDS.BIG);
+    this.centerPot.removeCoins(ROUNDS.SMALL);
+    this.centerPot.removeCoins(ROUNDS.PAIRS);
+    this.centerPot.removeCoins(ROUNDS.GAME);
+    let type;
+    users.forEach((user) => {
+      if (user === 0 || user === 3) {
+        type = 0;
       } else {
-        users = [1, 3];
-        big += coins_history[0][1].end;
+        type = 1;
       }
-      let worldPosition = this.centerPot.removeCoins(ROUNDS.BIG);
-      users.forEach((user) => {
-        if (user === 0 || user === 3) {
-          type = 0;
-        } else {
-          type = 1;
-        }
-        let coin = (type === 0) ? Math.floor(big / 5) : big % 5;
-        this._playerAvatars[user].addPoint(big);
-        this._playerCoins[user].addCoins(coin, worldPosition, type);
-      });
-    }
-    if (small > 0) {
-      if (coins_history[1][0].end > 0) {
-        users = [0, 2];
-        small += coins_history[1][0].end;
-      } else {
-        users = [1, 3];
-        small += coins_history[1][0].end;
-      }
-      let worldPosition = this.centerPot.removeCoins(ROUNDS.SMALL);
-      users.forEach((user) => {
-        if (user === 0 || user === 3) {
-          type = 0;
-        } else {
-          type = 1;
-        }
-        let coin = (type === 0) ? Math.floor(small / 5) : small % 5;
-        this._playerAvatars[user].addPoint(small);
-        this._playerCoins[user].addCoins(coin, worldPosition, type);
-      });
-    }
-    if (pairs > 0) {
-      if (coins_history[2][0].end > 0) {
-        users = [0, 2];
-        pairs += coins_history[2][0].end;
-      } else {
-        users = [1, 3];
-        pairs += coins_history[2][0].end;
-      }
-      let worldPosition = this.centerPot.removeCoins(ROUNDS.PAIRS);
-      users.forEach((user) => {
-        if (user === 0 || user === 3) {
-          type = 0;
-        } else {
-          type = 1;
-        }
-        let coin = (type === 0) ? Math.floor(pairs / 5) : pairs % 5;
-        this._playerAvatars[user].addPoint(pairs);
-        this._playerCoins[user].addCoins(coin, worldPosition, type);
-      });
-    }
-    if (game > 0) {
-      if (coins_history[3][0].end > 0 || coins_history[4][0].end > 0) {
-        users = [0, 2];
-        game += (coins_history[3][0].end + coins_history[4][0].end);
-      } else {
-        users = [1, 3];
-        game += (coins_history[3][1].end + coins_history[4][1].end);
-      }
-      let worldPosition = this.centerPot.removeCoins(ROUNDS.GAME);
-      users.forEach((user) => {
-        if (user === 0 || user === 3) {
-          type = 0;
-        } else {
-          type = 1;
-        }
-        let coin = (type === 0) ? Math.floor(game / 5) : game % 5;
-        this._playerAvatars[user].setPoint(game);
-        this._playerCoins[user].addCoins(coin, worldPosition, type);
-      });
-    }
+      let coin = (type === 0) ? Math.floor(total_coins[user] / 5) : total_coins[user] % 5;
+      this._playerAvatars[user].setPoint(total_coins[user]);
+      this._playerCoins[user].addCoins(coin, worldPosition, type);
+    });
+    this.stopPlayer(1);
+    this.stopPlayer(2);
+    this.stopPlayer(3);
+    this.stopPlayer(0);
   },
   doPoints(user, availableActions, state) {
     // this.cardDom.node.removeAllChildren();
@@ -293,12 +253,54 @@ cc.Class({
     this.playerActions.showBetButtons(user, availableActions, state);
     this.setActivePlayer(user);
   },
-  doEndRound(user, availableActions, state) {
+  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score) {
+    this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
     // this.cardDom.node.removeAllChildren();
     this.centerPot.setCurrentRound(ROUNDS.END);
+    for (let i = 0; i < this._playerHands.length; i++) {
+      this._playerHands[i].start();
+    }
+    if (endMission) {
+      for (let i = 0; i < this._playerCoins.length; i++) {
+        this._playerCoins[i].start();
+      }
+      for (let i = 0; i < this._playerAvatars.length; i++) {
+        this._playerAvatars[i].setPoint(0);
+      }
+      [0, 1, 2, 3].forEach((i) => {
+        this._missions[i].removeAllChildren();
+        if (mission_score[i % 2] === 1) {
+          let r1 = cc.instantiate(this.round1);
+          this._missions[i].addChild(r1);
+          r1.setPosition(cc.v2(0, 0));
+        } else if (mission_score[i % 2] === 2) {
+          let r2 = cc.instantiate(this.round2);
+          r2.setPosition(cc.v2(0, 0));
+          this._missions[i].addChild(r2);
+        }
+      });
+    }
+    this.endRound.setValues(coins_history, round_coins, total_coins, endMission);
     // this.playerActions.showBetButtons(user, availableActions);
-    this.endRound.active = true;
+    this.endRound.node.active = true;
+    if (mission_score[0] === 2 || mission_score[1] === 2) {
+      if (mission_score[0] === 2) {
+        setTimeout(() => {
+          this.endRound.node.active = false;
+          this.win.active = true;
+        }, 5000);
+      }
+      else {
+        setTimeout(() => {
+          this.endRound.node.active = false;
+          this.lose.active = true;
+        }, 5000);
+      }
+    }
+    this.stopPlayer(1);
+    this.stopPlayer(2);
     this.stopPlayer(3);
+    this.stopPlayer(0);
   },
   // update (dt) {},
 });

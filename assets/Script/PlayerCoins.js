@@ -1,4 +1,4 @@
-const endPositions = [[-12, -38], [13, -38], [-12, -11], [13, -11], [-12, 16], [13, 16]];
+const endPositions = [[-13, -42], [13, -42], [-13, -14], [13, -14], [-13, 14], [13, 14]];
 
 export default cc.Class({
     extends: cc.Component,
@@ -15,6 +15,8 @@ export default cc.Class({
 
     start() {
         this._coins = [];
+        this.node.removeAllChildren();
+        this.removeCoins();
     },
 
     addCoin(worldPosition) {
@@ -35,7 +37,15 @@ export default cc.Class({
         this._coins = [];
         this._type = type;
         for (let i = 0; i < coins; i++) {
+            if (i > 5)
+                return;
             this.addCoin(worldPosition, type);
         }
     },
+    removeCoins() {
+        this._coins.forEach((coin) => {
+            coin.node.destroy();
+        });
+        this._coins = [];
+    }
 });

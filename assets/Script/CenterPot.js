@@ -90,10 +90,14 @@ export default cc.Class({
       loadCenterPotBackground(this.bgImage, "4-game");
       this.gameText.node.color = SELECTED_COLOR;
       this.gameText.string = "Punto";
-    } else if (round === ROUNDS.POINTS) {
-      loadCenterPotBackground(this.bgImage, "empty.png");
-      this.gameText.node.color = SELECTED_COLOR;
-      this.gameText.string = "Punto";
+    } else if (round === ROUNDS.SHAREPOINTS) {
+      loadCenterPotBackground(this.bgImage, "empty");
+      this.gameText.node.color = NORMAL_COLOR;
+      this.gameText.string = "Juegdo";
+    } else if (round === ROUNDS.END) {
+      loadCenterPotBackground(this.bgImage, "empty");
+      this.gameText.node.color = NORMAL_COLOR;
+      this.gameText.string = "Juegdo";
     }
   },
 

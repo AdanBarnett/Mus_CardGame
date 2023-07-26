@@ -68,7 +68,7 @@ export const ClientCommService = {
         break;
 
       case MESSAGE_TYPE.SC_DO_END_ROUND:
-        GameScene.doEndRound(params.user, params.availableActions, params.state);
+        GameScene.doEndRound(params.coins_history, params.round_coins, params.total_coins, params.endMission, params.mission_score);
         break;
 
       case MESSAGE_TYPE.SC_DO_ALARM:
@@ -107,4 +107,8 @@ export const ClientCommService = {
   sendAllIn(user) {
     this.send(MESSAGE_TYPE.CS_ACTION_ALLIN, { user }, 1);
   },
+  sendRestart(user) {
+    this.send(MESSAGE_TYPE.CS_RESTART, { user }, 1);
+    GameScene.start();
+  }
 };

@@ -13,6 +13,8 @@ export default cc.Class({
 
   start() {
     this._cardComponents = [];
+    this.removeAllCards();
+    this.node.removeAllChildren();
   },
 
   setMine(isMine) {
