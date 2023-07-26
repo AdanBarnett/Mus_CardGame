@@ -1029,7 +1029,7 @@ const FakeServer = {
           coin: 0,
           type: "",
         };
-        if (i === winner || (i + 2) === winner) {
+        if (i % 2 === winner) {
           if (indexedArray[i].value.length === 4) {
             item.coin = 3;
             item.type = "(of duples)";
@@ -1058,7 +1058,7 @@ const FakeServer = {
           coin: 0,
           type: "",
         };
-        if (i === winner || (i + 2) === winner) {
+        if (i % 2 === winner) {
           if (indexedArray[i].value === 31) {
             item.coin = 3;
             item.type = "(of 31)";
@@ -1072,7 +1072,7 @@ const FakeServer = {
         }
       }
     }
-    if (this.currRound === ROUNDS.POINTS) {
+    if (this.currRound === ROUNDS.POINTS && !this.endMission) {
       let item = {
         coin: 0,
         type: "",
