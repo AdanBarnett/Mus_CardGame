@@ -821,7 +821,12 @@ const FakeServer = {
     let playersCardsSum = [...this.playersCardsSum];
     let pass = true;
     let indexedArray;
-    if (this.currRound === ROUNDS.EVAL_PAIRS || this.currRound === ROUNDS.EVAL_GAME) {
+    if (this.currRound === ROUNDS.EVAL_PAIRS) {
+      winner = this.availableUsers[0];
+      return winner;
+    }
+    if (this.currRound === ROUNDS.EVAL_GAME) {
+      winner = this.availableUsersForGame[0];
       return winner;
     }
     for (let i = 0; i < users.length; i++) {
@@ -1023,7 +1028,7 @@ const FakeServer = {
       let playerPairCards = [...this.playerPairCards];
       let indexedArray;
       indexedArray = playerPairCards.map((value, index) => ({ value, index }));
-      indexedArray.sort((a, b) => b.value.length - a.value.length);
+      // indexedArray.sort((a, b) => b.value.length - a.value.length);
       for (let i = 0; i < 4; i++) {
         let item = {
           coin: 0,
@@ -1033,17 +1038,17 @@ const FakeServer = {
           if (indexedArray[i].value.length === 4) {
             item.coin = 3;
             item.type = "(of duples)";
-            this.coins_history[2][(indexedArray[i].index) % 2].play.push({ ...item });
+            this.coins_history[2][winner].play.push({ ...item });
           }
           else if (indexedArray[i].value.length === 3) {
             item.coin = 2;
             item.type = "(of medias)";
-            this.coins_history[2][(indexedArray[i].index) % 2].play.push({ ...item });
+            this.coins_history[2][winner].play.push({ ...item });
           }
           else if (indexedArray[i].value.length === 2) {
             item.coin = 1;
             item.type = "(of pareja)";
-            this.coins_history[2][(indexedArray[i].index) % 2].play.push({ ...item });
+            this.coins_history[2][winner].play.push({ ...item });
           }
         }
       }
@@ -1052,7 +1057,7 @@ const FakeServer = {
       let playersCardsSum = [...this.playersCardsSum];
       let indexedArray;
       indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
-      indexedArray.sort(customComparator);
+      // indexedArray.sort(customComparator);
       for (let i = 0; i < 4; i++) {
         let item = {
           coin: 0,
@@ -1062,12 +1067,12 @@ const FakeServer = {
           if (indexedArray[i].value === 31) {
             item.coin = 3;
             item.type = "(of 31)";
-            this.coins_history[3][(indexedArray[i].index) % 2].play.push({ ...item });
+            this.coins_history[3][winner].play.push({ ...item });
           }
           else if (indexedArray[i].value > 31) {
             item.coin = 2;
             item.type = "(of others)";
-            this.coins_history[3][(indexedArray[i].index) % 2].play.push({ ...item });
+            this.coins_history[3][winner].play.push({ ...item });
           }
         }
       }
