@@ -161,7 +161,7 @@ function sumArray(array) {
   return array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 };
 
-const FakeServer = {
+export const FakeServer = {
   deckCards: [],
   discardedCards: [],
   playerCards: [],
@@ -1205,7 +1205,7 @@ const FakeServer = {
   }
 };
 
-FakeServer.initHandlers();
-setTimeout(() => {
-  FakeServer.startGame();
-}, 3000);
+// FakeServer.initHandlers();
+// setTimeout(() => {
+//   FakeServer.startGame();
+// }, 3000);

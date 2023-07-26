@@ -8,6 +8,7 @@ import { MESSAGE_TYPE, ROUNDS } from "./Common/Messages";
 import GlobalData from "./Common/GlobalData";
 import PlayerCoins from "./PlayerCoins";
 import EndContainer from "./EndContainer";
+import { FakeServer } from "./Server/FakeServer"
 
 export let GameScene;
 
@@ -57,6 +58,11 @@ cc.Class({
     GameScene = this;
     loadCardAtlas().then(() => {
       this.start();
+      FakeServer.initHandlers();
+      // setTimeout(() => {
+        FakeServer.startGame();
+      // }, 3000);
+
     }).catch((error) => {
       console.log("Error loading card atlas:", error);
     });
