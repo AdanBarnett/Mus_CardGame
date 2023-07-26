@@ -68,7 +68,7 @@ function calculateSum(cards) {
   // Define a helper function to handle the digit conversion
   function convertToDigit(num) {
     if (num === 2) {
-      return 1;
+      return 2;
     } else if (num === 11 || num === 12 || num === 3) {
       return 10;
     } else {
@@ -730,12 +730,7 @@ const FakeServer = {
         // this.startCategory();
         break;
       case ROUNDS.END:
-        if (this.total_coins[0] > 30) {
-          this.endMission = true;
-          this.mission_score[0] += 1;
-        } else if (this.total_coins[1] > 30) {
-          this.mission_score[1] += 1;
-        }
+        this.estimateEndOfMission();
         params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score };
         ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
         if (this.mission_score[0] === 2 || this.mission_score[1] === 2) {
@@ -772,6 +767,17 @@ const FakeServer = {
           });
         }
       }
+    }
+  },
+
+  // estimate end of mission
+  estimateEndOfMission() {
+    if (this.total_coins[0] > 30) {
+      this.endMission = true;
+      this.mission_score[0] += 1;
+    } else if (this.total_coins[1] > 30) {
+      this.endMission = true;
+      this.mission_score[1] += 1;
     }
   },
 
@@ -913,7 +919,13 @@ const FakeServer = {
       }
       else if (this.currRound === ROUNDS.PAIRS || this.currRound === ROUNDS.EVAL_PAIRS) {
         indexedArray = playerPairCards.map((value, index) => ({ value, index }));
-        indexedArray.sort((a, b) => b.value.length - a.value.length);
+        indexedArray.sort((a, b) => {
+          if (a.length === b.length) {
+            return b[b.length - 1] - a[a.length - 1];
+          } else {
+            return b.length - a.length;
+          }
+        });
         // Get the original indices after sorting
         const sortedIndices = indexedArray.map(obj => obj.index);
         console.log(sortedIndices);
@@ -930,7 +942,7 @@ const FakeServer = {
       }
       else if (this.currRound === ROUNDS.POINTS) {
         indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
-        indexedArray.sort((a, b) => a.value - b.value);
+        indexedArray.sort((a, b) => b.value - a.value);
         const sortedIndices = indexedArray.map(obj => obj.index);
         console.log(sortedIndices);
 
@@ -969,8 +981,6 @@ const FakeServer = {
           this.endMission = true;
           allIn = true;
           this.currRound = ROUNDS.POINTS;
-          console.log("ALL IN!!!!!!!!!!!!!", this.mission_score);
-          // return;
         }
       }
       if (!allIn) {
@@ -1061,6 +1071,15 @@ const FakeServer = {
           }
         }
       }
+    }
+    if (this.currRound === ROUNDS.POINTS) {
+      let item = {
+        coin: 0,
+        type: "",
+      };
+      item.coin = 1;
+      item.type = "(of points)";
+      this.coins_history[3][winner].play.push({ ...item });
     }
 
     console.log(this.coins_history);
