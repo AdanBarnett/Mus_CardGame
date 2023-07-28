@@ -60,7 +60,7 @@ cc.Class({
       this.start();
       FakeServer.initHandlers();
       // setTimeout(() => {
-        FakeServer.startGame();
+      FakeServer.startGame();
       // }, 3000);
 
     }).catch((error) => {
@@ -117,12 +117,15 @@ cc.Class({
     this._playerHands[user].addCards(cards);
   },
 
-  doMusClaim(user) {
+  doMusClaim(user, round_count, dealer) {
     this.centerPot.setCurrentRound(ROUNDS.MUS_CLAIM);
     // this.playerActions.showMusButtons();
     this.endRound.node.active = false;
     this.playerActions.showMusButtons(user);
     this.setActivePlayer(user);
+    this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
+    if (round_count === 1)
+      this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
   },
 
   doMusAlarm(user, mus) {
@@ -143,7 +146,6 @@ cc.Class({
       }
     });
     this._playerAvatars[user].startCountdown();
-    this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
   },
 
   stopPlayer(user) {
@@ -224,8 +226,8 @@ cc.Class({
     this.setActivePlayer(user);
   },
   // set total coins to winner when end
-  sharePoints(user, coins_history, total_coins) {
-    this.centerPot.setCurrentRound(ROUNDS.SHAREPOINTS);
+  sharePoints(user, coins_history, total_coins, points) {
+    this.centerPot.setCurrentRound(ROUNDS.SHAREPOINTS, points);
     // this.setActivePlayer(user);
     let users = [0, 1, 2, 3];
     // let big = this.centerPot._bigCoins.length;
@@ -259,10 +261,10 @@ cc.Class({
     this.playerActions.showBetButtons(user, availableActions, state);
     this.setActivePlayer(user);
   },
-  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score) {
+  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner) {
     this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
     // this.cardDom.node.removeAllChildren();
-    this.centerPot.setCurrentRound(ROUNDS.END);
+    this.centerPot.setCurrentRound(ROUNDS.END, points);
     for (let i = 0; i < this._playerHands.length; i++) {
       this._playerHands[i].start();
     }
@@ -286,7 +288,7 @@ cc.Class({
         }
       });
     }
-    this.endRound.setValues(coins_history, round_coins, total_coins, endMission);
+    this.endRound.setValues(coins_history, round_coins, total_coins, endMission, points, winner);
     // this.playerActions.showBetButtons(user, availableActions);
     this.endRound.node.active = true;
     if (mission_score[0] === 2 || mission_score[1] === 2) {

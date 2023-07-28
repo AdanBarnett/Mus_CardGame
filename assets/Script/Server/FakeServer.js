@@ -169,7 +169,7 @@ export const FakeServer = {
   playerPairCards: [],
   playersCardsSum: [],
   currRound: null,
-  dealer: 0,
+  dealer: -1,
   repliedUsers: [],
   bet_coins: [0, 0, 0, 0],   // betted coins in category
   total_coins: [0, 0, 0, 0],  // total coins of mission
@@ -194,6 +194,9 @@ export const FakeServer = {
   availableUsers: [],
   availableUsersForGame: [],
   openBet: 0,
+  points: false,
+  winner: -1,
+  round_count: 0,
 
   initHandlers() {
     ServerCommService.addRequestHandler(
@@ -232,17 +235,21 @@ export const FakeServer = {
 
   startGame() {
     this.mission_score = [0, 0];
+    this.dealer = -1;
     this.startMission();
   },
 
   startMission() {
-    this.startRound();
     this.total_coins = [0, 0, 0, 0];
     this.endMission = false;
+    this.winner = -1;
+    this.round_count = 0;
+    this.startRound();
   },
 
   startRound() {
-    this.dealer = 0;
+    this.round_count += 1;
+    this.dealer = (this.dealer + 1) % 4;
     this.deckCards = [];
     this.discardedCards = [];
     this.playerCards = [];
@@ -250,6 +257,7 @@ export const FakeServer = {
     this.bet_coins = [0, 0, 0, 0];
     this.endRound = false;
     this.round_coins = [0, 0, 0, 0];
+    this.points = false;
     this.coins_history = [
       [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
       [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
@@ -361,7 +369,7 @@ export const FakeServer = {
   // Ask user to claim Mus
   askMusClaim(user) {
     console.log("ask user to claim mus : " + user);
-    ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_CLAIM, { user }, user);
+    ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_CLAIM, { user, round_count: this.round_count, dealer: this.dealer }, user);
 
     TimeoutManager.setNextTimeout(() => {
       this.claimMus({ mus: true, user });
@@ -391,6 +399,8 @@ export const FakeServer = {
       for (let i = 0; i < PLAYER_CNT; i++) {
         this.playerCardsEval[i] = divideArrayItems(this.playerCards[i], 12);
       }
+      if (this.round_count === 1)
+        this.dealer = user;
       this.startCategory();
     }
   },
@@ -551,7 +561,6 @@ export const FakeServer = {
         break;
       case ROUNDS.SMALL:
         this.availableUsers = this.getUsersForPairs();
-        console.log("aaaaaaaaaaaa", this.availableUsers);
         this.currRound = ROUNDS.EVAL_PAIRS;
         break;
       case ROUNDS.EVAL_PAIRS:
@@ -574,13 +583,13 @@ export const FakeServer = {
         break;
       case ROUNDS.PAIRS:
         this.availableUsersForGame = this.getUsersForGame();
-        console.log("aaaaaaaaaaaa", this.availableUsers);
         this.currRound = ROUNDS.EVAL_GAME;
         break;
       case ROUNDS.EVAL_GAME:
         if (this.availableUsersForGame.length === 0) {
           // this.calcCoinInCategory();
           this.currRound = ROUNDS.POINTS;
+          this.points = true;
         } else if (this.availableUsersForGame.length === 1) {
           this.calcCoinInCategory();
           this.currRound = ROUNDS.SHAREPOINTS;
@@ -611,14 +620,22 @@ export const FakeServer = {
       // break;
       default: 0;
     }
-    let startUser = this.dealer;
+    let dealer = this.dealer;
     if (this.currRound === ROUNDS.PAIRS) {
-      startUser = Math.min(...this.availableUsers);
+      let array = [];
+      for (let i = 0; i < this.availableUsers.length; i++) {
+        array.push((this.availableUsers[i] - dealer + 4) % 4)
+      }
+      dealer = (Math.min(...array) + dealer) % 4;
     }
     if (this.currRound === ROUNDS.GAME) {
-      startUser = Math.min(...this.availableUsersForGame);
+      let array = [];
+      for (let i = 0; i < this.availableUsersForGame.length; i++) {
+        array.push((this.availableUsersForGame[i] - dealer + 4) % 4)
+      }
+      dealer = (Math.min(...array) + dealer) % 4;
     }
-    this.askAction(startUser);
+    this.askAction(dealer);
   },
 
   // get available actions
@@ -670,7 +687,7 @@ export const FakeServer = {
     let users = [];
     for (let i = 0; i < PLAYER_CNT; i++) {
       this.playersCardsSum[i] = calculateSum(this.playerCardsEval[i]);
-      if (this.playersCardsSum[i] > 30) {
+      if (this.playersCardsSum[i] > COINS_LIMIT) {
         users.push(i);
       }
     }
@@ -725,13 +742,13 @@ export const FakeServer = {
             })
           })
         })
-        params = { user, coins_history: this.coins_history, total_coins: this.total_coins, endMission: this.endMission };
+        params = { user, coins_history: this.coins_history, total_coins: this.total_coins, endMission: this.endMission, points: this.points, winner: this.winner };
         ServerCommService.send(MESSAGE_TYPE.SC_SHARE_POINT, params, user);
         // this.startCategory();
         break;
       case ROUNDS.END:
         this.estimateEndOfMission();
-        params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score };
+        params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score, points: this.points, winner: this.winner };
         ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
         if (this.mission_score[0] === 2 || this.mission_score[1] === 2) {
           this.endGame = true;
@@ -772,10 +789,10 @@ export const FakeServer = {
 
   // estimate end of mission
   estimateEndOfMission() {
-    if (this.total_coins[0] > 30) {
+    if (this.total_coins[0] > COINS_LIMIT) {
       this.endMission = true;
       this.mission_score[0] += 1;
-    } else if (this.total_coins[1] > 30) {
+    } else if (this.total_coins[1] > COINS_LIMIT) {
       this.endMission = true;
       this.mission_score[1] += 1;
     }
@@ -983,6 +1000,7 @@ export const FakeServer = {
       for (let i = 0; i < users.length; i++) {
         if (this.usersState_inCategory[users[i]].messageType === MESSAGE_TYPE.CS_ACTION_ALLIN) {
           this.mission_score[winner] += 1;
+          this.winner = winner;
           this.endMission = true;
           allIn = true;
           this.currRound = ROUNDS.POINTS;
@@ -1208,4 +1226,4 @@ export const FakeServer = {
 // FakeServer.initHandlers();
 // setTimeout(() => {
 //   FakeServer.startGame();
-// }, 3000);
+// }, COINS_LIMIT00);

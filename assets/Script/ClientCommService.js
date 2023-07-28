@@ -20,7 +20,7 @@ export const ClientCommService = {
         break;
 
       case MESSAGE_TYPE.SC_DO_MUS_CLAIM:
-        GameScene.doMusClaim(params.user);
+        GameScene.doMusClaim(params.user, params.round_count, params.dealer);
         break;
 
       case MESSAGE_TYPE.SC_DO_MUS_ALARM:
@@ -64,11 +64,11 @@ export const ClientCommService = {
         break;
 
       case MESSAGE_TYPE.SC_SHARE_POINT:
-        GameScene.sharePoints(params.user, params.coins_history, params.total_coins);
+        GameScene.sharePoints(params.user, params.coins_history, params.total_coins, params.points);
         break;
 
       case MESSAGE_TYPE.SC_DO_END_ROUND:
-        GameScene.doEndRound(params.coins_history, params.round_coins, params.total_coins, params.endMission, params.mission_score);
+        GameScene.doEndRound(params.coins_history, params.round_coins, params.total_coins, params.endMission, params.mission_score, params.points, params.winner);
         break;
 
       case MESSAGE_TYPE.SC_DO_ALARM:

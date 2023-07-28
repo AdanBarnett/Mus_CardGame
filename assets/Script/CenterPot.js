@@ -52,7 +52,7 @@ export default cc.Class({
     this._gamePosition = this.gameDom.convertToWorldSpaceAR(this.gameDom.getPosition());
   },
 
-  setCurrentRound(round) {
+  setCurrentRound(round, points) {
     this._currentRound = round;
 
     this._normalTexts.forEach((text) => {
@@ -64,6 +64,7 @@ export default cc.Class({
       this.musText.string = "MUS?"
       loadCenterPotBackground(this.bgImage, "0-mus");
     } else if (round === ROUNDS.BIG) {
+      this.musText.string = "MUS"
       loadCenterPotBackground(this.bgImage, "1-big");
       this.bigText.node.color = SELECTED_COLOR;
     } else if (round === ROUNDS.SMALL) {
@@ -93,10 +94,11 @@ export default cc.Class({
     } else if (round === ROUNDS.SHAREPOINTS) {
       loadCenterPotBackground(this.bgImage, "empty");
       this.gameText.node.color = NORMAL_COLOR;
-      this.gameText.string = "Juegdo";
+      this.gameText.string = (points) ? "Punto" : "Juegdo";
     } else if (round === ROUNDS.END) {
       loadCenterPotBackground(this.bgImage, "empty");
       this.gameText.node.color = NORMAL_COLOR;
+      this.gameText.string = (points) ? "Punto" : "Juegdo";
       this.gameText.string = "Juegdo";
     }
   },
