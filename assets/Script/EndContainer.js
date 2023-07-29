@@ -56,7 +56,7 @@ export default cc.Class({
         this.team2_game.removeAllChildren();
 
         // set game title
-        this.game_label = (points) ? "Punto" : "Game";
+        this.game_label.string = (points) ? "Punto" : "Game";
 
         // title
         this.title.string = (endMission) ? "End of the game" : "End of the round";
@@ -188,18 +188,18 @@ export default cc.Class({
                 }
             })
         } else {
-            let t1ge = coins_history[4][0].instant + coins_history[4][0].end;
-            let t2ge = coins_history[4][1].instant + coins_history[4][1].end;
-            if (t1ge > 0) {
+            let t1ge1 = coins_history[4][0].instant + coins_history[4][0].end;
+            let t2ge1 = coins_history[4][1].instant + coins_history[4][1].end;
+            if (t1ge1 > 0) {
                 let sg = cc.instantiate(this.score_group);
                 const sgc = sg.getComponent("ScoreGroup");
-                sgc.setValues(t1ge, "(envite)");
+                sgc.setValues(t1ge1, "(envite)");
                 this.team1_game.addChild(sg);
             }
-            if (t2ge > 0) {
+            if (t2ge1 > 0) {
                 let sg = cc.instantiate(this.score_group);
                 const sgc = sg.getComponent("ScoreGroup");
-                sgc.setValues(t2ge, "(envite)");
+                sgc.setValues(t2ge1, "(envite)");
                 this.team2_game.addChild(sg);
             }
             coins_history[4][0].play.forEach((play) => {
@@ -227,11 +227,14 @@ export default cc.Class({
         this.team2_total.string = total_coins[1];
 
         // display winner
-        if(winner === 1){
+        if (winner === 1) {
             this.winner1.string = "";
             this.winner2.string = "Winner!";
-        } else if(winner === 0){
+        } else if (winner === 0) {
             this.winner1.string = "Winner!";
+            this.winner2.string = "";
+        } else {
+            this.winner1.string = "";
             this.winner2.string = "";
         }
     }

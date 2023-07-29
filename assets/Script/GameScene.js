@@ -12,7 +12,8 @@ import { FakeServer } from "./Server/FakeServer"
 
 export let GameScene;
 
-const handPositions = [[256, 124], [851, 225], [697, 634], [153, 532]];
+const handPositions = [[-384, -236], [211, -134], [57, 274], [-487, 173]];
+const deckPositions = [[-618, -300], [253, -302], [256, 253], [-553, 251]];
 
 cc.Class({
   extends: cc.Component,
@@ -45,11 +46,14 @@ cc.Class({
     lose: cc.Node,
     win: cc.Node,
     aaa: cc.Node,
+    deck: cc.Node,
 
     _playerHands: [],
     _playerAvatars: [],
     _playerCoins: [],
     _missions: [],
+    _addCards: [],
+    _removedCards: [],
   },
 
   // LIFE-CYCLE CALLBACKS:
@@ -105,6 +109,8 @@ cc.Class({
         this._missions[i].removeAllChildren();
       }
       this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
+      this._addCards = [];
+      this._removedCards = [];
     } else {
       console.log("Card atlas not loaded yet");
     }
@@ -113,8 +119,12 @@ cc.Class({
   setPlayerCards(user, cards) {
     this._playerHands[user].setCards(cards);
   },
-  addPlayerCards(user, cards) {
-    this._playerHands[user].addCards(cards);
+  addPlayerCards(user, cards, discard) {
+    if (!discard) {
+      this._playerHands[user].addCards(cards);
+    } else {
+      this._addCards.push({ user, cards });
+    }
   },
 
   doMusClaim(user, round_count, dealer) {
@@ -124,8 +134,11 @@ cc.Class({
     this.playerActions.showMusButtons(user);
     this.setActivePlayer(user);
     this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
-    if (round_count === 1)
+    this.deck.setPosition(deckPositions[dealer][0], deckPositions[dealer][1]);
+    if (round_count === 1) {
       this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
+      this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
+    }
   },
 
   doMusAlarm(user, mus) {
@@ -152,9 +165,15 @@ cc.Class({
     this._playerAvatars[user].stopCountdown();
   },
 
-  doDiscard(user) {
+  doDiscard(user, dealer, round_count) {
     this.setActivePlayer(user);
     this.playerActions.showDiscardButton(user);
+    this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
+    this.deck.setPosition(deckPositions[dealer][0], deckPositions[dealer][1]);
+    if (round_count === 1) {
+      this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
+      this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
+    }
   },
 
   doDiscardAlarm(user, cards) {
@@ -169,6 +188,16 @@ cc.Class({
 
   removeSelectedCards(user, cards) {
     this._playerHands[user].removeCards(cards);
+  },
+
+  doDisplayDiscard() {
+    for (let i = 0; i < 4; i++) {
+      if (!(this._removedCards[i] === null || this._removedCards[i] === undefined))
+        this.removeSelectedCards(this._removedCards[i].user, this._removedCards[i].removedCards);
+      this._playerHands[this._addCards[i].user].addCards(this._addCards[i].cards);
+    }
+    this._addCards = [...[]];
+    this._removedCards = [...[]];
   },
 
   // add betted coins to board
@@ -262,7 +291,7 @@ cc.Class({
     this.setActivePlayer(user);
   },
   doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner) {
-    this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
+    // this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
     // this.cardDom.node.removeAllChildren();
     this.centerPot.setCurrentRound(ROUNDS.END, points);
     for (let i = 0; i < this._playerHands.length; i++) {

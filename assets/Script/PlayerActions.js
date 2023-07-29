@@ -100,7 +100,8 @@ export default cc.Class({
       selectedCards.map((card) => card.getCardIndex())
     );
     console.log(this._currentUser);
-    GameScene.removeSelectedCards(this._currentUser, selectedCards);
+    // GameScene.removeSelectedCards(this._currentUser, selectedCards);
+    GameScene._removedCards.push({ user: this._currentUser, removedCards: [...selectedCards] });
     this.showButtonRoot(false);
   },
 

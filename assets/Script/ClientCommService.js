@@ -16,7 +16,7 @@ export const ClientCommService = {
 
       case MESSAGE_TYPE.SC_ADD_CARDS:
         console.log("rherhsherhserhhhhhhhhhhhhhhhhhh");
-        GameScene.addPlayerCards(params.user, params.cards);
+        GameScene.addPlayerCards(params.user, params.cards, params.discard);
         break;
 
       case MESSAGE_TYPE.SC_DO_MUS_CLAIM:
@@ -27,8 +27,12 @@ export const ClientCommService = {
         GameScene.doMusAlarm(params.user, params.mus);
         break;
 
+      case MESSAGE_TYPE.SC_DISPLAY_DISCARD:
+        GameScene.doDisplayDiscard();
+        break;
+
       case MESSAGE_TYPE.SC_DO_MUS_DISCARD:
-        GameScene.doDiscard(params.user);
+        GameScene.doDiscard(params.user, params.dealer, params.round_count);
         break;
 
       case MESSAGE_TYPE.SC_DO_DISCARD_ALARM:

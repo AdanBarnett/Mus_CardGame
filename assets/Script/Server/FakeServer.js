@@ -15,12 +15,20 @@ let item_history = {
   play: [],
 };
 
+// divide array by divisor and sort by decresing order
 function divideArrayItems(array, divisor) {
   let dividedArray = array.map(item => (item % divisor) + 1);
-  dividedArray.sort((a, b) => b - a)
+  dividedArray = dividedArray.map(num => {
+    // if (num === 2) return 1;
+    // if (num === 3) return 12;
+    return num;
+  });
+  dividedArray.sort((a, b) => b - a);
   return [...dividedArray];
 }
 
+
+// find a card group for pairs
 function findCombination(cards) {
   // Replace 12 with 1 and 3 with 12 in the input array
   let numbers = cards.map(num => {
@@ -64,6 +72,8 @@ function findCombination(cards) {
   return [];
 }
 
+
+// calculate sum of player's cards
 function calculateSum(cards) {
   // Define a helper function to handle the digit conversion
   function convertToDigit(num) {
@@ -85,7 +95,7 @@ function calculateSum(cards) {
   return sum;
 }
 
-// Define the specific number sequence
+// Define the specific number sequence for game category
 const numberSequence = [31, 32, 40, 37, 36, 35, 34];
 
 // Define the order based on the number sequence
@@ -162,27 +172,28 @@ function sumArray(array) {
 };
 
 export const FakeServer = {
-  deckCards: [],
-  discardedCards: [],
-  playerCards: [],
-  playerCardsEval: [],
-  playerPairCards: [],
-  playersCardsSum: [],
-  currRound: null,
-  dealer: -1,
-  repliedUsers: [],
+  deckCards: [], // cards of deck (1~40)
+  discardedCards: [], // discarded cards
+  playerCards: [], // cards of players
+  playerCardsEval: [], // divided cards by 12 of players
+  playerPairCards: [], // available card groups for pair category 
+  playersCardsSum: [], // available card groups for game category
+  currRound: null,  // state of round (ROUNDS.)
+  dealer: -1, // dealer of game
+  repliedUsers: [], // already replied users
   bet_coins: [0, 0, 0, 0],   // betted coins in category
   total_coins: [0, 0, 0, 0],  // total coins of mission
   round_coins: [0, 0, 0, 0],  // total coins of round
   // the score of round (e: [1, 0] )
-  mission_score: [0, 0],
-  usersState_inCategory: [],
-  endCategory: false,
-  endRound: false,
-  endMission: false,
-  endGame: false,
-  stateCategory: "",
-  prevAvAction: null,
+  mission_score: [0, 0], // the score of mission
+  usersState_inCategory: [], // states of players in specific category (e.g. pass, envido, ...)
+  endCategory: false, // end flag of category
+  endRound: false, // end flag of round
+  endMission: false, // end flag of mission
+  endGame: false, // end flag of game
+  stateCategory: "", // the state of current category (e.g. pass, envido, ...)
+  prevAvAction: null, // previous available actions 
+  // history of each players in every category
   coins_history: [
     [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
     [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
@@ -190,13 +201,13 @@ export const FakeServer = {
     [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
     [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
   ],
-  envidoState: false,
-  availableUsers: [],
-  availableUsersForGame: [],
-  openBet: 0,
-  points: false,
-  winner: -1,
-  round_count: 0,
+  envidoState: false, // state of envido
+  availableUsers: [], // available players for pair
+  availableUsersForGame: [], // available players for game
+  openBet: 0, // to get opening bet
+  points: false, // the flag of points category to display points on center pot
+  winner: -1, // the winner of round
+  round_count: 0, // to get first round
 
   initHandlers() {
     ServerCommService.addRequestHandler(
@@ -233,12 +244,15 @@ export const FakeServer = {
     );
   },
 
+
+  // start of game
   startGame() {
     this.mission_score = [0, 0];
     this.dealer = -1;
     this.startMission();
   },
 
+  // start of mission
   startMission() {
     this.total_coins = [0, 0, 0, 0];
     this.endMission = false;
@@ -247,6 +261,7 @@ export const FakeServer = {
     this.startRound();
   },
 
+  // start of round
   startRound() {
     this.round_count += 1;
     this.dealer = (this.dealer + 1) % 4;
@@ -279,6 +294,7 @@ export const FakeServer = {
     this.resetRepliedUsers();
   },
 
+  // generate cards deck
   _generateDeck() {
     this.deckCards = [];
     for (let i = 0; i < 48; i++) {
@@ -290,6 +306,7 @@ export const FakeServer = {
     shuffle(this.deckCards);
   },
 
+  // if deck become smaller, you can add cards to deck
   _addCardsToDeck() {
     if (this.deckCards.length < 6) {
       let temp = [];
@@ -313,19 +330,35 @@ export const FakeServer = {
   },
 
   // Deal cards to players so that everyone has CARD_CNT cards
-  _redealCards() {
-    for (let i = 0; i < PLAYER_CNT; i++) {
-      const existingCount = this.playerCards[i].length;
+  _redealCards(discard, user) {
+    if (discard) {
+      const existingCount = this.playerCards[user].length;
       const playerCards = this.deckCards.splice(0, CARD_CNT - existingCount);
-      this.playerCards[i].push(...playerCards);
+      this.playerCards[user].push(...playerCards);
       ServerCommService.send(
         MESSAGE_TYPE.SC_ADD_CARDS,
         {
           cards: playerCards,
-          user: i,
+          user: user,
+          discard,
         },
-        i
+        user
       );
+    } else {
+      for (let i = 0; i < PLAYER_CNT; i++) {
+        const existingCount = this.playerCards[i].length;
+        const playerCards = this.deckCards.splice(0, CARD_CNT - existingCount);
+        this.playerCards[i].push(...playerCards);
+        ServerCommService.send(
+          MESSAGE_TYPE.SC_ADD_CARDS,
+          {
+            cards: playerCards,
+            user: i,
+            discard,
+          },
+          i
+        );
+      }
     }
     this._addCardsToDeck();
   },
@@ -362,7 +395,7 @@ export const FakeServer = {
 
   startMusClaim() {
     this.setCurrentRound(ROUNDS.MUS_CLAIM);
-    this._redealCards();
+    this._redealCards(false);
     this.askMusClaim(this.dealer);
   },
 
@@ -390,7 +423,9 @@ export const FakeServer = {
     if (mus) {
       if (this.isAllUsersReplied()) {
         this.setCurrentRound(ROUNDS.MUS_DISCARD);
-        this.askMusDiscard((user + 1) % PLAYER_CNT);
+        if (this.round_count === 1)
+          this.dealer = (user + 2) % PLAYER_CNT;
+        this.askMusDiscard(this.dealer);
       } else {
         console.log("ask:" + (user + 1));
         this.askMusClaim((user + 1) % PLAYER_CNT);
@@ -409,7 +444,7 @@ export const FakeServer = {
   // Ask user to discard cards
   askMusDiscard(user) {
     console.log("ask user to discard :" + user)
-    ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_DISCARD, { user }, -1);
+    ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_DISCARD, { user, dealer: this.dealer, round_count: this.round_count }, -1);
     // this.finishMusDiscard();
     TimeoutManager.setNextTimeout(() => {
       console.log("time discard:" + user);
@@ -434,16 +469,17 @@ export const FakeServer = {
       (card) => !cards.includes(card)
     );
     this.discardedCards.push(...cards);
-    this._redealCards();
+    this._redealCards(true, user);
     // TODO: Uncomment this code when we move to backend
     if (!this.isAllUsersReplied()) {
       this.askMusDiscard((user + 1) % PLAYER_CNT);
     } else {
+      ServerCommService.send(MESSAGE_TYPE.SC_DISPLAY_DISCARD, {}, 1);
       this.startMusClaim();
     }
   },
 
-  // start play round (use for big, small, pairs, game)
+  // set current category values
   setCurrentCategory() {
     this.usersState_inCategory = [
       {
@@ -540,11 +576,11 @@ export const FakeServer = {
       if (users.includes((user + 1) % 4) && this.usersState_inCategory[(user + 1) % 4].messageType === "" && (this.usersState_inCategory[(user + 3) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || this.usersState_inCategory[(user + 3) % 4].messageType === "")) {
         return (user + 1) % 4;
       }
+      else if (users.includes((user + 2) % 4) && this.usersState_inCategory[(user + 2) % 4].messageType === "") {
+        return (user + 2) % 4;
+      }
       else if (users.includes((user + 3) % 4) && this.usersState_inCategory[(user + 3) % 4].messageType === "" && (this.usersState_inCategory[(user + 1) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || this.usersState_inCategory[(user + 1) % 4].messageType === "")) {
         return (user + 3) % 4;
-      }
-      else if (users.includes((user + 2) % 4)) {
-        return (user + 2) % 4;
       }
     }
   },
@@ -765,7 +801,7 @@ export const FakeServer = {
       else if (this.currRound === ROUNDS.SHAREPOINTS) {
         TimeoutManager.setNextTimeout(() => {
           this.endShareMode();
-        }, 2);
+        }, 5);
       }
       else {
         TimeoutManager.setNextTimeout(() => {
@@ -792,9 +828,11 @@ export const FakeServer = {
     if (this.total_coins[0] > COINS_LIMIT) {
       this.endMission = true;
       this.mission_score[0] += 1;
+      this.winner = 0;
     } else if (this.total_coins[1] > COINS_LIMIT) {
       this.endMission = true;
       this.mission_score[1] += 1;
+      this.winner = 1;
     }
   },
 
@@ -834,6 +872,15 @@ export const FakeServer = {
   getWinnerInCategory(users) {
     let winner = 0;
     let players = [...this.playerCardsEval];
+    for (let i = 0; i < PLAYER_CNT; i++) {
+      players[i] = players[i].map((num) => {
+        if (num === 2)
+          return 1;
+        if (num === 3)
+          return 12;
+        return num;
+      })
+    }
     let playerPairCards = [...this.playerPairCards];
     let playersCardsSum = [...this.playersCardsSum];
     let pass = true;
@@ -849,6 +896,9 @@ export const FakeServer = {
     for (let i = 0; i < users.length; i++) {
       if (this.usersState_inCategory[users[i]].messageType === MESSAGE_TYPE.CS_ACTION_ACCEPT) {
         if (this.currRound === ROUNDS.BIG) {
+          players.map((value) => {
+            return value.sort((a, b) => (b - a));
+          });
           indexedArray = players.map((value, index) => ({ value, index }));
           indexedArray.sort((a, b) => {
             for (let i = 0; i < 4; i++) {
@@ -877,10 +927,16 @@ export const FakeServer = {
         }
         else if (this.currRound === ROUNDS.PAIRS) {
           indexedArray = playerPairCards.map((value, index) => ({ value, index }));
-          indexedArray.sort((a, b) => b.value.length - a.value.length);
-          // playerPairCards.sort((a, b) => {
-          //   return a.length - b.length;
-          // });
+          indexedArray.sort((a, b) => {
+            if (a.value.length === b.value.length) {
+              if (b.value[0] === a.value[0]) {
+                return b.value[2] - a.value[2];
+              }
+              else return b.value[0] - a.value[0];
+            } else {
+              return b.value.length - a.value.length;
+            }
+          });
           // Get the original indices after sorting
           const sortedIndices = indexedArray.map(obj => obj.index);
           console.log(sortedIndices);
@@ -897,7 +953,7 @@ export const FakeServer = {
         }
         else if (this.currRound === ROUNDS.POINTS) {
           indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
-          indexedArray.sort((a, b) => a.value - b.value);
+          indexedArray.sort((a, b) => b.value - a.value);
           const sortedIndices = indexedArray.map(obj => obj.index);
           console.log(sortedIndices);
 
@@ -911,6 +967,9 @@ export const FakeServer = {
     }
     if (pass) {
       if (this.currRound === ROUNDS.BIG) {
+        players.map((value) => {
+          return value.sort((a, b) => (b - a));
+        });
         indexedArray = players.map((value, index) => ({ value, index }));
         indexedArray.sort((a, b) => {
           for (let i = 0; i < 4; i++) {
@@ -921,7 +980,6 @@ export const FakeServer = {
         });
         const sortedIndices = indexedArray.map(obj => obj.index);
         winner = sortedIndices[0];
-        // this.coins_history[this.currRound - 2][winner % 2].end = 1;
       }
       else if (this.currRound === ROUNDS.SMALL) {
         players.map((value) => {
@@ -937,15 +995,17 @@ export const FakeServer = {
         });
         const sortedIndices = indexedArray.map(obj => obj.index);
         winner = sortedIndices[0];
-        // this.coins_history[this.currRound - 2][winner % 2].end = 1;
       }
       else if (this.currRound === ROUNDS.PAIRS || this.currRound === ROUNDS.EVAL_PAIRS) {
         indexedArray = playerPairCards.map((value, index) => ({ value, index }));
         indexedArray.sort((a, b) => {
-          if (a.length === b.length) {
-            return b[b.length - 1] - a[a.length - 1];
+          if (a.value.length === b.value.length) {
+            if (b.value[0] === a.value[0]) {
+              return b.value[2] - a.value[2];
+            }
+            else return b.value[0] - a.value[0];
           } else {
-            return b.length - a.length;
+            return b.value.length - a.value.length;
           }
         });
         // Get the original indices after sorting
@@ -1102,7 +1162,7 @@ export const FakeServer = {
       };
       item.coin = 1;
       item.type = "(of points)";
-      this.coins_history[3][winner].play.push({ ...item });
+      this.coins_history[4][winner].play.push({ ...item });
     }
 
     console.log(this.coins_history);
