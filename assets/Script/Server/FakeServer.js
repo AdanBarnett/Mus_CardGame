@@ -250,6 +250,7 @@ export const FakeServer = {
     this.mission_score = [0, 0];
     this.dealer = -1;
     this.startMission();
+    this.endGame = false;
   },
 
   // start of mission
