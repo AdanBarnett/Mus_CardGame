@@ -1,4 +1,4 @@
-import { TIME_LIMIT } from "./Common/Constants";
+import { TIME_LIMIT, ALARM_LIMIT } from "./Common/Constants";
 import { loadAvatar } from "./Common/SpriteHelper";
 
 export default cc.Class({
@@ -41,7 +41,7 @@ export default cc.Class({
     this.notifyRoot.active = true;
     setTimeout(() => {
       self.notifyRoot.active = false;
-    }, 1000);
+    }, ALARM_LIMIT * 1000);
   },
 
   setName(str) {

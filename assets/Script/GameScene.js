@@ -9,6 +9,7 @@ import GlobalData from "./Common/GlobalData";
 import PlayerCoins from "./PlayerCoins";
 import EndContainer from "./EndContainer";
 import { FakeServer } from "./Server/FakeServer"
+import { ALARM_LIMIT } from "./Common/Constants";
 
 export let GameScene;
 
@@ -128,21 +129,25 @@ cc.Class({
   },
 
   doMusClaim(user, round_count, dealer) {
-    this.centerPot.setCurrentRound(ROUNDS.MUS_CLAIM);
-    // this.playerActions.showMusButtons();
-    this.endRound.node.active = false;
-    this.playerActions.showMusButtons(user);
-    this.setActivePlayer(user);
-    this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
-    this.deck.setPosition(deckPositions[dealer][0], deckPositions[dealer][1]);
-    if (round_count === 1) {
-      this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
-      this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
-    }
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.MUS_CLAIM);
+      // this.playerActions.showMusButtons();
+      this.endRound.node.active = false;
+      this.playerActions.showMusButtons(user);
+      this.setActivePlayer(user);
+      this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
+      this.deck.setPosition(deckPositions[dealer][0], deckPositions[dealer][1]);
+      if (round_count === 1) {
+        this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
+        this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
+      }
+    }, ALARM_LIMIT * 1000);
+
   },
 
   doMusAlarm(user, mus) {
-    console.log("alarm!!!!!!!!!!!!!!!!!!!!!!!!");
     this._playerAvatars[user].showNotify(mus ? "Mus" : "There is no mus.");
   },
 
@@ -166,14 +171,18 @@ cc.Class({
   },
 
   doDiscard(user, dealer, round_count) {
-    this.setActivePlayer(user);
-    this.playerActions.showDiscardButton(user);
-    this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
-    this.deck.setPosition(deckPositions[dealer][0], deckPositions[dealer][1]);
-    if (round_count === 1) {
-      this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
-      this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
-    }
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.setActivePlayer(user);
+      this.playerActions.showDiscardButton(user);
+      this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
+      this.deck.setPosition(deckPositions[dealer][0], deckPositions[dealer][1]);
+      if (round_count === 1) {
+        this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
+        this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
+      }
+    }, ALARM_LIMIT * 1000);
   },
 
   doDiscardAlarm(user, cards) {
@@ -191,13 +200,17 @@ cc.Class({
   },
 
   doDisplayDiscard() {
-    for (let i = 0; i < 4; i++) {
-      if (!(this._removedCards[i] === null || this._removedCards[i] === undefined))
-        this.removeSelectedCards(this._removedCards[i].user, this._removedCards[i].removedCards);
-      this._playerHands[this._addCards[i].user].addCards(this._addCards[i].cards);
-    }
-    this._addCards = [...[]];
-    this._removedCards = [...[]];
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      for (let i = 0; i < 4; i++) {
+        if (!(this._removedCards[i] === null || this._removedCards[i] === undefined))
+          this.removeSelectedCards(this._removedCards[i].user, this._removedCards[i].removedCards);
+        this._playerHands[this._addCards[i].user].addCards(this._addCards[i].cards);
+      }
+      this._addCards = [...[]];
+      this._removedCards = [...[]];
+    }, ALARM_LIMIT * 1000);
   },
 
   // add betted coins to board
@@ -226,73 +239,104 @@ cc.Class({
   },
 
   doBig(user, availableActions, state) {
-    this.cardDom.removeAllChildren();
-    this.centerPot.setCurrentRound(ROUNDS.BIG);
-    this.playerActions.showBetButtons(user, availableActions, state);
-    this.setActivePlayer(user);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.cardDom.removeAllChildren();
+      this.centerPot.setCurrentRound(ROUNDS.BIG);
+      this.playerActions.showBetButtons(user, availableActions, state);
+      this.setActivePlayer(user);
+    }, ALARM_LIMIT * 1000);
+
   },
   doSmall(user, availableActions, state) {
-    this.centerPot.setCurrentRound(ROUNDS.SMALL);
-    this.playerActions.showBetButtons(user, availableActions, state);
-    this.setActivePlayer(user);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.SMALL);
+      this.playerActions.showBetButtons(user, availableActions, state);
+      this.setActivePlayer(user);
+    }, ALARM_LIMIT * 1000);
+
   },
   evalPairs(user) {
-    this.centerPot.setCurrentRound(ROUNDS.EVAL_PAIRS);
-    this.setActivePlayer(user);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.EVAL_PAIRS);
+      // this.setActivePlayer(user);
+    }, ALARM_LIMIT * 1000);
+
   },
   doPairs(user, availableActions, state) {
-    this.centerPot.setCurrentRound(ROUNDS.PAIRS);
-    this.playerActions.showBetButtons(user, availableActions, state);
-    this.setActivePlayer(user);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.PAIRS);
+      this.playerActions.showBetButtons(user, availableActions, state);
+      this.setActivePlayer(user);
+    }, ALARM_LIMIT * 1000);
+
   },
   evalGame(user) {
-    this.centerPot.setCurrentRound(ROUNDS.EVAL_GAME);
-    this.setActivePlayer(user);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.EVAL_GAME);
+      // this.setActivePlayer(user);
+    }, ALARM_LIMIT * 1000);
+
   },
   doGame(user, availableActions, state) {
-    this.centerPot.setCurrentRound(ROUNDS.GAME);
-    this.playerActions.showBetButtons(user, availableActions, state);
-    this.setActivePlayer(user);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.GAME);
+      this.playerActions.showBetButtons(user, availableActions, state);
+      this.setActivePlayer(user);
+    }, ALARM_LIMIT * 1000);
+
   },
   // set total coins to winner when end
   sharePoints(user, coins_history, total_coins, points) {
-    this.centerPot.setCurrentRound(ROUNDS.SHAREPOINTS, points);
-    // this.setActivePlayer(user);
-    let users = [0, 1, 2, 3];
-    // let big = this.centerPot._bigCoins.length;
-    // let small = this.centerPot._smallCoins.length;
-    // let pairs = this.centerPot._pairsCoins.length;
-    // let game = this.centerPot._gameCoins.length;
-    let worldPosition = this.node.convertToWorldSpaceAR(this.node.getPosition());;
-    this.centerPot.removeCoins(ROUNDS.BIG);
-    this.centerPot.removeCoins(ROUNDS.SMALL);
-    this.centerPot.removeCoins(ROUNDS.PAIRS);
-    this.centerPot.removeCoins(ROUNDS.GAME);
-    let type;
-    users.forEach((user) => {
-      if (user === 0 || user === 3) {
-        type = 0;
-      } else {
-        type = 1;
-      }
-      let coin = (type === 0) ? Math.floor(total_coins[user] / 5) : total_coins[user] % 5;
-      this._playerAvatars[user].setPoint(total_coins[user]);
-      this._playerCoins[user].addCoins(coin, worldPosition, type);
-    });
-    this.stopPlayer(1);
-    this.stopPlayer(2);
-    this.stopPlayer(3);
-    this.stopPlayer(0);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.SHAREPOINTS, points);
+      // this.setActivePlayer(user);
+      let users = [0, 1, 2, 3];
+      let worldPosition = this.node.convertToWorldSpaceAR(this.node.getPosition());;
+      this.centerPot.removeCoins(ROUNDS.BIG);
+      this.centerPot.removeCoins(ROUNDS.SMALL);
+      this.centerPot.removeCoins(ROUNDS.PAIRS);
+      this.centerPot.removeCoins(ROUNDS.GAME);
+      let type;
+      users.forEach((user) => {
+        if (user === 0 || user === 3) {
+          type = 0;
+        } else {
+          type = 1;
+        }
+        let coin = (type === 0) ? Math.floor(total_coins[user] / 5) : total_coins[user] % 5;
+        this._playerAvatars[user].setPoint(total_coins[user]);
+        this._playerCoins[user].addCoins(coin, worldPosition, type);
+      });
+      this.stopPlayer(1);
+      this.stopPlayer(2);
+      this.stopPlayer(3);
+      this.stopPlayer(0);
+    }, ALARM_LIMIT * 1000);
   },
   doPoints(user, availableActions, state) {
-    // this.cardDom.node.removeAllChildren();
-    this.centerPot.setCurrentRound(ROUNDS.POINTS);
-    this.playerActions.showBetButtons(user, availableActions, state);
-    this.setActivePlayer(user);
+    this.playerActions.buttonRoot.active = false;
+    this._playerAvatars.forEach((item) => item.stopCountdown());
+    setTimeout(() => {
+      this.centerPot.setCurrentRound(ROUNDS.POINTS);
+      this.playerActions.showBetButtons(user, availableActions, state);
+      this.setActivePlayer(user);
+    }, ALARM_LIMIT * 1000);
   },
   doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner) {
-    // this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
-    // this.cardDom.node.removeAllChildren();
     this.centerPot.setCurrentRound(ROUNDS.END, points);
     for (let i = 0; i < this._playerHands.length; i++) {
       this._playerHands[i].start();
@@ -318,7 +362,6 @@ cc.Class({
       });
     }
     this.endRound.setValues(coins_history, round_coins, total_coins, endMission, points, winner);
-    // this.playerActions.showBetButtons(user, availableActions);
     this.endRound.node.active = true;
     if (mission_score[0] === 2 || mission_score[1] === 2) {
       if (mission_score[0] === 2) {

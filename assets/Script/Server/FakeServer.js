@@ -1,6 +1,6 @@
 import { MESSAGE_TYPE, ROUNDS } from "../Common/Messages";
 import { ClientCommService } from "../Common/CommServices";
-import { TIME_LIMIT, COINS_LIMIT } from "../Common/Constants";
+import { TIME_LIMIT, COINS_LIMIT, ALARM_LIMIT } from "../Common/Constants";
 
 const PLAYER_CNT = 4;
 const CARD_CNT = 4;
@@ -156,7 +156,7 @@ const TimeoutManager = {
     this.timeoutHandler = setTimeout(() => {
       callback();
       // this.timeoutHandler = null;
-    }, (timeLimit) ? (timeLimit * 1000) : (TIME_LIMIT * 1000));
+    }, (timeLimit) ? (timeLimit * 1000) : ((TIME_LIMIT + ALARM_LIMIT) * 1000));
   },
 
   clearNextTimeout() {
@@ -797,7 +797,7 @@ export const FakeServer = {
       if ([ROUNDS.EVAL_GAME, ROUNDS.EVAL_PAIRS].includes(this.currRound)) {
         TimeoutManager.setNextTimeout(() => {
           this.eval({ user }, 1);
-        }, 2);
+        }, ALARM_LIMIT);
       }
       else if (this.currRound === ROUNDS.SHAREPOINTS) {
         TimeoutManager.setNextTimeout(() => {
@@ -842,9 +842,6 @@ export const FakeServer = {
     console.log("eval pairs or game");
     TimeoutManager.clearNextTimeout();
     let user = params.user;
-    // this.stateCategory = "eval";
-    // this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_PASS;
-    // this.usersState_inCategory[user].coin = 0;
     if (!this.markUserReplied(user)) {
       return;
     }
