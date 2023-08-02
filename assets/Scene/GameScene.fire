@@ -16513,7 +16513,7 @@
         "__id__": 440
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 625
@@ -16779,15 +16779,15 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
+        -146.323,
         0,
         0,
         0,
         0,
         0,
         1,
-        1,
-        1,
+        0.8,
+        0.8,
         1
       ]
     },
@@ -23518,7 +23518,7 @@
     "_top": 190,
     "_bottom": 190,
     "_verticalCenter": 0,
-    "_horizontalCenter": 0,
+    "_horizontalCenter": -146.323,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,

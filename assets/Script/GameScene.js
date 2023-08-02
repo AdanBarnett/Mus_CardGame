@@ -9,7 +9,7 @@ import GlobalData from "./Common/GlobalData";
 import PlayerCoins from "./PlayerCoins";
 import EndContainer from "./EndContainer";
 import { FakeServer } from "./Server/FakeServer"
-import { ALARM_LIMIT } from "./Common/Constants";
+import { ALARM_LIMIT, TIME_LIMIT } from "./Common/Constants";
 
 export let GameScene;
 
@@ -338,9 +338,11 @@ cc.Class({
   },
   doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner) {
     this.centerPot.setCurrentRound(ROUNDS.END, points);
-    for (let i = 0; i < this._playerHands.length; i++) {
-      this._playerHands[i].start();
-    }
+    setTimeout(() => {
+      for (let i = 0; i < this._playerHands.length; i++) {
+        this._playerHands[i].start();
+      }
+    }, TIME_LIMIT * 1000);
     if (endMission) {
       for (let i = 0; i < this._playerCoins.length; i++) {
         this._playerCoins[i].start();
