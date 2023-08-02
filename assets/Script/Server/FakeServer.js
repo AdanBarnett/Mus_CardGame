@@ -114,7 +114,7 @@ function customComparator(a, b) {
   } else if (orderA > orderB) {
     return 1;
   } else {
-    return 0;
+    return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4;
   }
 }
 
@@ -396,7 +396,9 @@ export const FakeServer = {
 
   startMusClaim() {
     this.setCurrentRound(ROUNDS.MUS_CLAIM);
-    this._redealCards(false);
+    setTimeout(() => {
+      this._redealCards(false);
+    }, ALARM_LIMIT * 1000);
     this.askMusClaim(this.dealer);
   },
 
@@ -784,7 +786,8 @@ export const FakeServer = {
         // this.startCategory();
         break;
       case ROUNDS.END:
-        this.estimateEndOfMission();
+        if (!this.endMission)
+          this.estimateEndOfMission();
         params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score, points: this.points, winner: this.winner };
         ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
         if (this.mission_score[0] === 2 || this.mission_score[1] === 2) {
@@ -827,6 +830,27 @@ export const FakeServer = {
   // estimate end of mission
   estimateEndOfMission() {
     if (this.total_coins[0] > COINS_LIMIT) {
+      if (this.total_coins[1] > COINS_LIMIT) {
+        if (this.total_coins[0] > this.total_coins[1]) {
+          this.endMission = true;
+          this.mission_score[0] += 1;
+          this.winner = 0;
+        } else if (this.total_coins[1] > this.total_coins[0]) {
+          this.endMission = true;
+          this.mission_score[1] += 1;
+          this.winner = 1;
+        } else {
+          if (this.dealer % 2 === 0) {
+            this.endMission = true;
+            this.mission_score[0] += 1;
+            this.winner = 0;
+          } else {
+            this.endMission = true;
+            this.mission_score[1] += 1;
+            this.winner = 1;
+          }
+        }
+      }
       this.endMission = true;
       this.mission_score[0] += 1;
       this.winner = 0;
@@ -904,6 +928,9 @@ export const FakeServer = {
                 return b.value[i] - a.value[i];
               }
             }
+            if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+            }
           });
           const sortedIndices = indexedArray.map(obj => obj.index);
           winner = sortedIndices[0];
@@ -919,6 +946,9 @@ export const FakeServer = {
                 return a.value[i] - b.value[i];
               }
             }
+            if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+            }
           });
           const sortedIndices = indexedArray.map(obj => obj.index);
           winner = sortedIndices[0];
@@ -926,7 +956,10 @@ export const FakeServer = {
         else if (this.currRound === ROUNDS.PAIRS) {
           indexedArray = playerPairCards.map((value, index) => ({ value, index }));
           indexedArray.sort((a, b) => {
-            if (a.value.length === b.value.length) {
+            if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+            }
+            else if (a.value.length === b.value.length) {
               if (b.value[0] === a.value[0]) {
                 return b.value[2] - a.value[2];
               }
@@ -951,7 +984,14 @@ export const FakeServer = {
         }
         else if (this.currRound === ROUNDS.POINTS) {
           indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
-          indexedArray.sort((a, b) => b.value - a.value);
+          indexedArray.sort((a, b) => {
+            if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+            }
+            else if (b.value !== a.value) {
+              return b.value - a.value
+            }
+          });
           const sortedIndices = indexedArray.map(obj => obj.index);
           console.log(sortedIndices);
 
@@ -975,6 +1015,9 @@ export const FakeServer = {
               return b.value[i] - a.value[i];
             }
           }
+          if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+          }
         });
         const sortedIndices = indexedArray.map(obj => obj.index);
         winner = sortedIndices[0];
@@ -990,6 +1033,9 @@ export const FakeServer = {
               return a.value[i] - b.value[i];
             }
           }
+          if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+          }
         });
         const sortedIndices = indexedArray.map(obj => obj.index);
         winner = sortedIndices[0];
@@ -997,7 +1043,10 @@ export const FakeServer = {
       else if (this.currRound === ROUNDS.PAIRS || this.currRound === ROUNDS.EVAL_PAIRS) {
         indexedArray = playerPairCards.map((value, index) => ({ value, index }));
         indexedArray.sort((a, b) => {
-          if (a.value.length === b.value.length) {
+          if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+          }
+          else if (a.value.length === b.value.length) {
             if (b.value[0] === a.value[0]) {
               return b.value[2] - a.value[2];
             }
@@ -1022,7 +1071,14 @@ export const FakeServer = {
       }
       else if (this.currRound === ROUNDS.POINTS) {
         indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
-        indexedArray.sort((a, b) => b.value - a.value);
+        indexedArray.sort((a, b) => {
+          if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
+            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+          }
+          else if (b.value !== a.value) {
+            return b.value - a.value
+          }
+        });
         const sortedIndices = indexedArray.map(obj => obj.index);
         console.log(sortedIndices);
 
@@ -1057,11 +1113,13 @@ export const FakeServer = {
       let allIn = false;
       for (let i = 0; i < users.length; i++) {
         if (this.usersState_inCategory[users[i]].messageType === MESSAGE_TYPE.CS_ACTION_ALLIN) {
-          this.mission_score[winner] += 1;
-          this.winner = winner;
-          this.endMission = true;
-          allIn = true;
-          this.currRound = ROUNDS.POINTS;
+          if (!this.endMission) {
+            this.mission_score[winner] += 1;
+            this.winner = winner;
+            this.endMission = true;
+            allIn = true;
+          }
+          // this.currRound = ROUNDS.POINTS;
         }
       }
       if (!allIn) {
@@ -1180,6 +1238,10 @@ export const FakeServer = {
     this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "Accept" }, 1);
     if (this.isEndCategory(user)) {
       this.calcCoinInCategory();
+      if (!this.endMission)
+        this.estimateEndOfMission();
+      if (this.endMission)
+        this.currRound = ROUNDS.POINTS;
       this.startCategory();
     }
   },
@@ -1195,6 +1257,10 @@ export const FakeServer = {
     this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "Pass" }, 1);
     if (this.isEndCategory(user)) {
       this.calcCoinInCategory();
+      if (!this.endMission)
+        this.estimateEndOfMission();
+      if (this.endMission)
+        this.currRound = ROUNDS.POINTS;
       this.startCategory();
     } else {
       this.askAction(this.setNextUser(user));
