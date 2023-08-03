@@ -551,6 +551,7 @@ export const FakeServer = {
 
   // set next user to action
   setNextUser(user) {
+    // let sum = this.bet_coins.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
     let users = [];
     if (this.currRound === ROUNDS.PAIRS) {
       users = [...this.availableUsers];
@@ -559,11 +560,28 @@ export const FakeServer = {
     } else {
       users = [0, 1, 2, 3];
     }
-    if (["envido", "allIn"].includes(this.stateCategory)) {
-      if (users.includes((user + 1) % 4)) {
+    if (["envido"].includes(this.stateCategory)) {
+      if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
         return (user + 1) % 4;
       } else if (users.includes((user + 3) % 4)) {
         return (user + 3) % 4;
+      }
+    }
+    else if (["allIn"].includes(this.stateCategory)) {
+      if (!this.envidoState) {
+        if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
+          return (user + 1) % 4;
+        } else if (users.includes((user + 3) % 4)) {
+          return (user + 3) % 4;
+        }
+      } else {
+        if (users.includes((user + 1) % 4)
+          && [MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
+        ) {
+          return (user + 1) % 4;
+        } else if (users.includes((user + 3) % 4)) {
+          return (user + 3) % 4;
+        }
       }
     }
     else if (this.stateCategory === "betMore") {
@@ -1299,6 +1317,7 @@ export const FakeServer = {
     const user = params.user;
     const coin = params.coin;
     this.stateCategory = "betMore";
+    // this.envidoState = false;
     this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_BET_MORE;
     this.usersState_inCategory[user].coin = coin;
     this.bet_coins[user] += coin;
