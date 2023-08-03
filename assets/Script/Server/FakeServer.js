@@ -642,7 +642,8 @@ export const FakeServer = {
         break;
       case ROUNDS.EVAL_PAIRS:
         if (this.availableUsers.length < 2) {
-          this.calcCoinInCategory();
+          if (this.availableUsers.length === 1)
+            this.calcCoinInCategory();
           this.currRound = ROUNDS.EVAL_GAME;
           this.availableUsersForGame = this.getUsersForGame();
         } else if (this.availableUsers.length === 2) {
