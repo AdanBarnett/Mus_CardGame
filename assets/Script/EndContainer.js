@@ -256,7 +256,7 @@ export default cc.Class({
         if (this._winCards[0].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[0].user];
-        com = child.getComponent('PlayerHand');
+        let com = child.getComponent('PlayerHand');
         setTimeout(() => {
             com.selectAll();
         }, 100);
@@ -271,7 +271,7 @@ export default cc.Class({
         if (this._winCards[1].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[1].user];
-        com = child.getComponent('PlayerHand');
+        let com = child.getComponent('PlayerHand');
         setTimeout(() => {
             com.selectAll();
         }, 100);
@@ -286,7 +286,7 @@ export default cc.Class({
         if (this._winCards[2].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[2].user];
-        com = child.getComponent('PlayerHand');
+        let com = child.getComponent('PlayerHand');
         setTimeout(() => {
             com.selectAll();
         }, 100);
@@ -301,7 +301,7 @@ export default cc.Class({
         if (this._winCards[3].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[3].user];
-        com = child.getComponent('PlayerHand');
+        let com = child.getComponent('PlayerHand');
         setTimeout(() => {
             com.selectAll();
         }, 100);
