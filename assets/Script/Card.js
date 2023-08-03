@@ -42,6 +42,12 @@ cc.Class({
 
   setSelected(highlight) {
     this.highlightSprite.node.active = highlight;
+    const pos = this.getPosition();
+    if (this.isSelected() === true) {
+      this.moveToPos(0.1, pos.x, 10);
+    } else {
+      this.moveToPos(0.1, pos.x, 0);
+    };
   },
 
   isFront() {
@@ -151,12 +157,12 @@ cc.Class({
   onUserClick() {
     // console.log(this.getCardIndex());
     this.setSelected(!this.isSelected());
-    const pos = this.getPosition();
-    if (this.isSelected() === true) {
-      this.moveToPos(0.1, pos.x, pos.y + 10);
-    } else {
-      this.moveToPos(0.1, pos.x, pos.y - 10);
-    };
+    // const pos = this.getPosition();
+    // if (this.isSelected() === true) {
+    //   this.moveToPos(0.1, pos.x, pos.y + 10);
+    // } else {
+    //   this.moveToPos(0.1, pos.x, pos.y - 10);
+    // };
   },
 
   start() { },

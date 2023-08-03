@@ -208,6 +208,12 @@ export const FakeServer = {
   points: false, // the flag of points category to display points on center pot
   winner: -1, // the winner of round
   round_count: 0, // to get first round
+  win_cards: [
+    { user: -1, cards: [] },
+    { user: -1, cards: [] },
+    { user: -1, cards: [] },
+    { user: -1, cards: [] }
+  ],
 
   initHandlers() {
     ServerCommService.addRequestHandler(
@@ -281,6 +287,12 @@ export const FakeServer = {
       [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
       [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
     ];
+    this.win_cards = [
+      { user: -1, cards: [] },
+      { user: -1, cards: [] },
+      { user: -1, cards: [] },
+      { user: -1, cards: [] }
+    ]
     this._generateDeck();
     for (let i = 0; i < PLAYER_CNT; i++) {
       this.playerCards[i] = [];
@@ -563,7 +575,11 @@ export const FakeServer = {
     if (["envido"].includes(this.stateCategory)) {
       if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
         return (user + 1) % 4;
-      } else if (users.includes((user + 3) % 4)) {
+      }
+      else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
+        return (user + 1) % 4;
+      }
+      else if (users.includes((user + 3) % 4)) {
         return (user + 3) % 4;
       }
     }
@@ -571,7 +587,11 @@ export const FakeServer = {
       if (!this.envidoState) {
         if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
           return (user + 1) % 4;
-        } else if (users.includes((user + 3) % 4)) {
+        }
+        else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
+          return (user + 1) % 4;
+        }
+        else if (users.includes((user + 3) % 4)) {
           return (user + 3) % 4;
         }
       } else {
@@ -806,7 +826,7 @@ export const FakeServer = {
       case ROUNDS.END:
         if (!this.endMission)
           this.estimateEndOfMission();
-        params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score, points: this.points, winner: this.winner };
+        params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score, points: this.points, winner: this.winner, win_cards: this.win_cards };
         ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
         if (this.mission_score[0] === 2 || this.mission_score[1] === 2) {
           this.endGame = true;
@@ -927,10 +947,14 @@ export const FakeServer = {
     let indexedArray;
     if (this.currRound === ROUNDS.EVAL_PAIRS) {
       winner = this.availableUsers[0];
+      this.win_cards[2].user = winner;
+      this.win_cards[2].cards = [...this.playerCards[winner]];
       return winner;
     }
     if (this.currRound === ROUNDS.EVAL_GAME) {
       winner = this.availableUsersForGame[0];
+      this.win_cards[3].user = winner;
+      this.win_cards[3].cards = [...this.playerCards[winner]];
       return winner;
     }
     for (let i = 0; i < users.length; i++) {
@@ -952,6 +976,8 @@ export const FakeServer = {
           });
           const sortedIndices = indexedArray.map(obj => obj.index);
           winner = sortedIndices[0];
+          this.win_cards[0].user = winner;
+          this.win_cards[0].cards = [...this.playerCards[winner]];
         }
         else if (this.currRound === ROUNDS.SMALL) {
           players.map((value) => {
@@ -970,6 +996,8 @@ export const FakeServer = {
           });
           const sortedIndices = indexedArray.map(obj => obj.index);
           winner = sortedIndices[0];
+          this.win_cards[1].user = winner;
+          this.win_cards[1].cards = [...this.playerCards[winner]];
         }
         else if (this.currRound === ROUNDS.PAIRS) {
           indexedArray = playerPairCards.map((value, index) => ({ value, index }));
@@ -988,17 +1016,17 @@ export const FakeServer = {
           });
           // Get the original indices after sorting
           const sortedIndices = indexedArray.map(obj => obj.index);
-          console.log(sortedIndices);
-
           winner = sortedIndices[0];
+          this.win_cards[2].user = winner;
+          this.win_cards[2].cards = [...this.playerCards[winner]];
         }
         else if (this.currRound === ROUNDS.GAME) {
           indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
           indexedArray.sort(customComparator);
           const sortedIndices = indexedArray.map(obj => obj.index);
-          console.log(sortedIndices);
-
           winner = sortedIndices[0];
+          this.win_cards[3].user = winner;
+          this.win_cards[3].cards = [...this.playerCards[winner]];
         }
         else if (this.currRound === ROUNDS.POINTS) {
           indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
@@ -1011,13 +1039,13 @@ export const FakeServer = {
             }
           });
           const sortedIndices = indexedArray.map(obj => obj.index);
-          console.log(sortedIndices);
-
           winner = sortedIndices[0];
+          this.win_cards[3].user = winner;
+          this.win_cards[3].cards = [...this.playerCards[winner]];
         }
         return winner;
       }
-      if (this.usersState_inCategory[i].messageType !== MESSAGE_TYPE.CS_ACTION_PASS) {
+      if (this.usersState_inCategory[users[i]].messageType !== MESSAGE_TYPE.CS_ACTION_PASS) {
         pass = false;
       }
     }
@@ -1039,6 +1067,8 @@ export const FakeServer = {
         });
         const sortedIndices = indexedArray.map(obj => obj.index);
         winner = sortedIndices[0];
+        this.win_cards[0].user = winner;
+        this.win_cards[0].cards = [...this.playerCards[winner]];
       }
       else if (this.currRound === ROUNDS.SMALL) {
         players.map((value) => {
@@ -1057,8 +1087,10 @@ export const FakeServer = {
         });
         const sortedIndices = indexedArray.map(obj => obj.index);
         winner = sortedIndices[0];
+        this.win_cards[1].user = winner;
+        this.win_cards[1].cards = [...this.playerCards[winner]];
       }
-      else if (this.currRound === ROUNDS.PAIRS || this.currRound === ROUNDS.EVAL_PAIRS) {
+      else if (this.currRound === ROUNDS.PAIRS) {
         indexedArray = playerPairCards.map((value, index) => ({ value, index }));
         indexedArray.sort((a, b) => {
           if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
@@ -1075,17 +1107,17 @@ export const FakeServer = {
         });
         // Get the original indices after sorting
         const sortedIndices = indexedArray.map(obj => obj.index);
-        console.log(sortedIndices);
-
         winner = sortedIndices[0];
+        this.win_cards[2].user = winner;
+        this.win_cards[2].cards = [...this.playerCards[winner]];
       }
-      else if (this.currRound === ROUNDS.GAME || this.currRound === ROUNDS.EVAL_GAME) {
+      else if (this.currRound === ROUNDS.GAME) {
         indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
         indexedArray.sort(customComparator);
         const sortedIndices = indexedArray.map(obj => obj.index);
-        console.log(sortedIndices);
-
         winner = sortedIndices[0];
+        this.win_cards[3].user = winner;
+        this.win_cards[3].cards = [...this.playerCards[winner]];
       }
       else if (this.currRound === ROUNDS.POINTS) {
         indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
@@ -1099,8 +1131,9 @@ export const FakeServer = {
         });
         const sortedIndices = indexedArray.map(obj => obj.index);
         console.log(sortedIndices);
-
         winner = sortedIndices[0];
+        this.win_cards[3].user = winner;
+        this.win_cards[3].cards = [...this.playerCards[winner]];
       }
       return winner;
     } else {
@@ -1108,6 +1141,26 @@ export const FakeServer = {
         console.log("ccccccccccccccccccccccccccc: ", i)
         if ([MESSAGE_TYPE.CS_ACTION_ALLIN, MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[users[i]].messageType)) {
           winner = users[i];
+          if (this.currRound === ROUNDS.BIG) {
+            this.win_cards[0].user = winner;
+            this.win_cards[0].cards = [...this.playerCards[winner]];
+          }
+          else if (this.currRound === ROUNDS.SMALL) {
+            this.win_cards[1].user = winner;
+            this.win_cards[1].cards = [...this.playerCards[winner]];
+          }
+          else if (this.currRound === ROUNDS.PAIRS) {
+            this.win_cards[2].user = winner;
+            this.win_cards[2].cards = [...this.playerCards[winner]];
+          }
+          else if (this.currRound === ROUNDS.GAME) {
+            this.win_cards[3].user = winner;
+            this.win_cards[3].cards = [...this.playerCards[winner]];
+          }
+          else if (this.currRound === ROUNDS.POINTS) {
+            this.win_cards[3].user = winner;
+            this.win_cards[3].cards = [...this.playerCards[winner]];
+          }
           return winner;
         }
       }
@@ -1118,9 +1171,9 @@ export const FakeServer = {
   // calculate bet_coins in Category
   calcCoinInCategory() {
     let users = [];
-    if (this.currRound === ROUNDS.PAIRS) {
+    if (this.currRound === ROUNDS.PAIRS || this.currRound === ROUNDS.EVAL_PAIRS) {
       users = [...this.availableUsers];
-    } else if (this.currRound === ROUNDS.GAME) {
+    } else if (this.currRound === ROUNDS.GAME || this.currRound === ROUNDS.EVAL_GAME) {
       users = [...this.availableUsersForGame];
     } else {
       users = [0, 1, 2, 3];

@@ -1,3 +1,5 @@
+import { GameScene } from "./GameScene";
+
 export default cc.Class({
     extends: cc.Component,
 
@@ -25,11 +27,14 @@ export default cc.Class({
         p4: cc.Label,
         winner1: cc.Label,
         winner2: cc.Label,
+        game_scene: cc.Node,
 
         _t1p: [],
         _t2p: [],
         _t1g: [],
         _t2g: [],
+        _winCards: [],
+        _intervalId: 0,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -43,7 +48,10 @@ export default cc.Class({
         this.p4.string = "Player 4";
     },
 
-    setValues(coins_history, round_coins, total_coins, endMission, points, winner) {
+    setValues(coins_history, round_coins, total_coins, endMission, points, winner, win_cards, intervalId) {
+        this._winCards = win_cards;
+        this._intervalId = intervalId;
+
         // debugger;
         console.log("end round", coins_history, round_coins, total_coins);
         this.team1_big.removeAllChildren();
@@ -237,6 +245,66 @@ export default cc.Class({
             this.winner1.string = "";
             this.winner2.string = "";
         }
+    },
+
+    onBigClickButton() {
+        clearInterval(this._intervalId);
+        this.game_scene.getChildren().forEach((child) => {
+            let com = child.getComponent('PlayerHand');
+            com.deselectAll();
+        });
+        if (this._winCards[0].user === -1)
+            return;
+        let child = this.game_scene.getChildren()[this._winCards[0].user];
+        com = child.getComponent('PlayerHand');
+        setTimeout(() => {
+            com.selectAll();
+        }, 100);
+    },
+
+    onSmallClickButton() {
+        clearInterval(this._intervalId);
+        this.game_scene.getChildren().forEach((child) => {
+            let com = child.getComponent('PlayerHand');
+            com.deselectAll();
+        });
+        if (this._winCards[1].user === -1)
+            return;
+        let child = this.game_scene.getChildren()[this._winCards[1].user];
+        com = child.getComponent('PlayerHand');
+        setTimeout(() => {
+            com.selectAll();
+        }, 100);
+    },
+
+    onPairsClickButton() {
+        clearInterval(this._intervalId);
+        this.game_scene.getChildren().forEach((child) => {
+            let com = child.getComponent('PlayerHand');
+            com.deselectAll();
+        });
+        if (this._winCards[2].user === -1)
+            return;
+        let child = this.game_scene.getChildren()[this._winCards[2].user];
+        com = child.getComponent('PlayerHand');
+        setTimeout(() => {
+            com.selectAll();
+        }, 100);
+    },
+
+    onGameClickButton() {
+        clearInterval(this._intervalId);
+        this.game_scene.getChildren().forEach((child) => {
+            let com = child.getComponent('PlayerHand');
+            com.deselectAll();
+        });
+        if (this._winCards[3].user === -1)
+            return;
+        let child = this.game_scene.getChildren()[this._winCards[3].user];
+        com = child.getComponent('PlayerHand');
+        setTimeout(() => {
+            com.selectAll();
+        }, 100);
     }
     //   update(dt) {},
 });

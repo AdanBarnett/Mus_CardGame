@@ -129,6 +129,7 @@ cc.Class({
   },
 
   doMusClaim(user, round_count, dealer) {
+    this._playerHands.forEach((item) => item.setInteractable(true));
     this.playerActions.buttonRoot.active = false;
     this._playerAvatars.forEach((item) => item.stopCountdown());
     setTimeout(() => {
@@ -239,6 +240,8 @@ cc.Class({
   },
 
   doBig(user, availableActions, state) {
+    this._playerHands.forEach((item) => item.setInteractable(false));
+    this._playerHands.forEach((item) => item.deselectAll());
     this.playerActions.buttonRoot.active = false;
     this._playerAvatars.forEach((item) => item.stopCountdown());
     setTimeout(() => {
@@ -336,13 +339,16 @@ cc.Class({
       this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
   },
-  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner) {
+  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner, win_cards) {
     this.centerPot.setCurrentRound(ROUNDS.END, points);
+    let i = 0;
+    const intervalId = setInterval(() => { this.highlightWinnerCards(i, win_cards); i++; }, ALARM_LIMIT * 1000);
     setTimeout(() => {
       for (let i = 0; i < this._playerHands.length; i++) {
         this._playerHands[i].start();
       }
-    }, TIME_LIMIT * 1000);
+      clearInterval(intervalId);
+    }, (TIME_LIMIT + ALARM_LIMIT) * 1000);
     if (endMission) {
       for (let i = 0; i < this._playerCoins.length; i++) {
         this._playerCoins[i].start();
@@ -363,26 +369,36 @@ cc.Class({
         }
       });
     }
-    this.endRound.setValues(coins_history, round_coins, total_coins, endMission, points, winner);
+    this.endRound.setValues(coins_history, round_coins, total_coins, endMission, points, winner, win_cards, intervalId);
     this.endRound.node.active = true;
     if (mission_score[0] === 2 || mission_score[1] === 2) {
       if (mission_score[0] === 2) {
         setTimeout(() => {
           this.endRound.node.active = false;
           this.win.active = true;
-        }, 5000);
+        }, (TIME_LIMIT + ALARM_LIMIT) * 1000);
       }
       else {
         setTimeout(() => {
           this.endRound.node.active = false;
           this.lose.active = true;
-        }, 5000);
+        }, (TIME_LIMIT + ALARM_LIMIT) * 1000);
       }
     }
     this.stopPlayer(1);
     this.stopPlayer(2);
     this.stopPlayer(3);
     this.stopPlayer(0);
+    // this._playerHands[winner].selectAll();
+  },
+
+  highlightWinnerCards(i, win_cards) {
+    console.log(i);
+    this._playerHands.forEach((item) => item.deselectAll());
+    if (i < 4 && win_cards[i].user !== -1)
+      setTimeout(() => {
+        this._playerHands[win_cards[i].user].selectAll();
+      }, 100);
   },
   // update (dt) {},
 });

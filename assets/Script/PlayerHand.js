@@ -144,6 +144,10 @@ export default cc.Class({
 
   deselectAll() {
     this._cardComponents.forEach((cardComponent) => {
+      // if (cardComponent.isSelected() === true) {
+      //   const pos = cardComponent.getPosition();
+      //   cardComponent.moveToPos(0.1, pos.x, 0);
+      // }
       cardComponent.setSelected(false);
     });
   },
