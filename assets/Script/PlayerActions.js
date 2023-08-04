@@ -92,9 +92,9 @@ export default cc.Class({
   onUserDiscardClick() {
     console.log("onUserDiscardClick : " + this._currentUser);
     var selectedCards = GameScene.getMySelectedCards(this._currentUser);
-    if (selectedCards.length === 0) {
-      return;
-    }
+    // if (selectedCards.length === 0) {
+    //   return;
+    // }
     ClientCommService.sendDiscardCards(
       this._currentUser,
       selectedCards.map((card) => card.getCardIndex())
