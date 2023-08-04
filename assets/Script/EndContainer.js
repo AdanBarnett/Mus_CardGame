@@ -1,4 +1,7 @@
+import { ROUNDS } from "./Common/Messages";
 import { GameScene } from "./GameScene";
+
+const selected = [[-207, -31], [-94, -31], [18, -31], [132, -31]];
 
 export default cc.Class({
     extends: cc.Component,
@@ -28,6 +31,7 @@ export default cc.Class({
         winner1: cc.Label,
         winner2: cc.Label,
         game_scene: cc.Node,
+        selected: cc.Node,
 
         _t1p: [],
         _t2p: [],
@@ -48,7 +52,7 @@ export default cc.Class({
         this.p4.string = "Player 4";
     },
 
-    setValues(coins_history, round_coins, total_coins, endMission, points, winner, win_cards, intervalId) {
+    setValues(coins_history, round_coins, total_coins, endMission, points, winner, win_cards, intervalId, allIn) {
         this._winCards = win_cards;
         this._intervalId = intervalId;
 
@@ -68,6 +72,41 @@ export default cc.Class({
 
         // title
         this.title.string = (endMission) ? "End of the game" : "End of the round";
+
+        // all in
+        if (allIn !== -1) {
+            let sg = cc.instantiate(this.score_group);
+            const sgc = sg.getComponent("ScoreGroup");
+            sgc.setValues(0, "All In");
+            if (allIn === ROUNDS.BIG) {
+                if (winner === 0) {
+                    this.team1_big.addChild(sg);
+                } else if (winner === 1){
+                    this.team2_big.addChild(sg);
+                }
+            }
+            else if (allIn === ROUNDS.SMALL) {
+                if (winner === 0) {
+                    this.team1_small.addChild(sg);
+                } else if (winner === 1){
+                    this.team2_small.addChild(sg);
+                }
+            }
+            else if (allIn === ROUNDS.PAIRS) {
+                if (winner === 0) {
+                    this.team1_pairs.addChild(sg);
+                } else if (winner === 1){
+                    this.team2_pairs.addChild(sg);
+                }
+            }
+            else if (allIn === ROUNDS.GAME || allIn === ROUNDS.POINTS) {
+                if (winner === 0) {
+                    this.team1_game.addChild(sg);
+                } else if (winner === 1){
+                    this.team2_game.addChild(sg);
+                }
+            }
+        }
 
         // big
         let t1bp = coins_history[0][0].instant;
@@ -253,6 +292,8 @@ export default cc.Class({
             let com = child.getComponent('PlayerHand');
             com.deselectAll();
         });
+        this.selected.setPosition(selected[0][0], selected[0][1]);
+        this.selected.active = true;
         if (this._winCards[0].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[0].user];
@@ -268,6 +309,8 @@ export default cc.Class({
             let com = child.getComponent('PlayerHand');
             com.deselectAll();
         });
+        this.selected.setPosition(selected[1][0], selected[1][1]);
+        this.selected.active = true;
         if (this._winCards[1].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[1].user];
@@ -283,6 +326,8 @@ export default cc.Class({
             let com = child.getComponent('PlayerHand');
             com.deselectAll();
         });
+        this.selected.setPosition(selected[2][0], selected[2][1]);
+        this.selected.active = true;
         if (this._winCards[2].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[2].user];
@@ -298,6 +343,8 @@ export default cc.Class({
             let com = child.getComponent('PlayerHand');
             com.deselectAll();
         });
+        this.selected.setPosition(selected[3][0], selected[3][1]);
+        this.selected.active = true;
         if (this._winCards[3].user === -1)
             return;
         let child = this.game_scene.getChildren()[this._winCards[3].user];

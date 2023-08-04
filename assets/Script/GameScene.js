@@ -15,6 +15,7 @@ export let GameScene;
 
 const handPositions = [[-384, -236], [211, -134], [57, 274], [-487, 173]];
 const deckPositions = [[-618, -300], [253, -302], [256, 253], [-553, 251]];
+const selected = [[-207, -31], [-94, -31], [18, -31], [132, -31]];
 
 cc.Class({
   extends: cc.Component,
@@ -112,6 +113,7 @@ cc.Class({
       this.hand.setPosition(handPositions[0][0], handPositions[0][1]);
       this._addCards = [];
       this._removedCards = [];
+      this.endRound.selected.active = false;
     } else {
       console.log("Card atlas not loaded yet");
     }
@@ -339,7 +341,8 @@ cc.Class({
       this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
   },
-  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner, win_cards) {
+  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner, win_cards, allIn) {
+    this.endRound.selected.active = false;
     this.centerPot.setCurrentRound(ROUNDS.END, points);
     let i = 0;
     const intervalId = setInterval(() => { this.highlightWinnerCards(i, win_cards); i++; }, ALARM_LIMIT * 1000);
@@ -369,7 +372,7 @@ cc.Class({
         }
       });
     }
-    this.endRound.setValues(coins_history, round_coins, total_coins, endMission, points, winner, win_cards, intervalId);
+    this.endRound.setValues(coins_history, round_coins, total_coins, endMission, points, winner, win_cards, intervalId, allIn);
     this.endRound.node.active = true;
     if (mission_score[0] === 2 || mission_score[1] === 2) {
       if (mission_score[0] === 2) {
@@ -398,6 +401,11 @@ cc.Class({
     if (i < 4 && win_cards[i].user !== -1)
       setTimeout(() => {
         this._playerHands[win_cards[i].user].selectAll();
+      }, 100);
+    if (i < 4)
+      setTimeout(() => {
+        this.endRound.selected.setPosition(selected[i][0], selected[i][1]);
+        this.endRound.selected.active = true;
       }, 100);
   },
   // update (dt) {},

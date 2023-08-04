@@ -11,7 +11,12 @@ export default cc.Class({
     onLoad() { },
     start() { },
     setValues(score, type) {
-        this.score.string = score;
+        if (score === 0) {
+            this.score.string = '';
+        }
+        else {
+            this.score.string = score;
+        }
         this.type.string = type;
     }
 });

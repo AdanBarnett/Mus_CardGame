@@ -214,6 +214,7 @@ export const FakeServer = {
     { user: -1, cards: [] },
     { user: -1, cards: [] }
   ],
+  allIn: -1,
 
   initHandlers() {
     ServerCommService.addRequestHandler(
@@ -265,6 +266,7 @@ export const FakeServer = {
     this.endMission = false;
     this.winner = -1;
     this.round_count = 0;
+    this.allIn = -1;
     this.startRound();
   },
 
@@ -827,7 +829,7 @@ export const FakeServer = {
       case ROUNDS.END:
         if (!this.endMission)
           this.estimateEndOfMission();
-        params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score, points: this.points, winner: this.winner, win_cards: this.win_cards };
+        params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score, points: this.points, winner: this.winner, win_cards: this.win_cards, allIn: this.allIn };
         ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
         if (this.mission_score[0] === 2 || this.mission_score[1] === 2) {
           this.endGame = true;
@@ -1189,6 +1191,7 @@ export const FakeServer = {
             this.mission_score[winner] += 1;
             this.winner = winner;
             this.endMission = true;
+            this.allIn = this.currRound;
             allIn = true;
           }
           // this.currRound = ROUNDS.POINTS;
