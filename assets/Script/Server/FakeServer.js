@@ -614,6 +614,15 @@ export const FakeServer = {
       } else if (users.includes((user + 3) % 4)) {
         return (user + 3) % 4;
       }
+      // if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
+      //   return (user + 1) % 4;
+      // }
+      // else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
+      //   return (user + 1) % 4;
+      // }
+      // else if (users.includes((user + 3) % 4)) {
+      //   return (user + 3) % 4;
+      // }
     }
     else if (this.stateCategory === "pass") {
       if (users.includes((user + 1) % 4) && this.usersState_inCategory[(user + 1) % 4].messageType === "" && (this.usersState_inCategory[(user + 3) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || this.usersState_inCategory[(user + 3) % 4].messageType === "")) {
@@ -1379,7 +1388,7 @@ export const FakeServer = {
     this.usersState_inCategory[user].coin = coin;
     this.bet_coins[user] += coin;
     this.openBet += 1;
-    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: ((coin > 1) ? coin : "") + " more", coin }, 1);
+    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: ((coin > 0) ? coin : "") + " more", coin }, 1);
     if (this.isEndCategory(user)) {
       // doesn't come in here
     } else {

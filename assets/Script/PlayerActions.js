@@ -124,9 +124,17 @@ export default cc.Class({
   },
 
   onUserMinusClick() {
-    if (this._amount > 2) {
-      this._amount--;
-      this.updateBetAmountLabel();
+    if (this.betAmountLabel.string.startsWith("ENVIDO")) {
+      if (this._amount > 2) {
+        this._amount--;
+        this.updateBetAmountLabel();
+      }
+    }
+    else {
+      if (this._amount > 1) {
+        this._amount--;
+        this.updateBetAmountLabel();
+      }
     }
   },
 
