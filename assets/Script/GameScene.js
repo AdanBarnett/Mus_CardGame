@@ -182,8 +182,8 @@ cc.Class({
       this.hand.setPosition(handPositions[dealer][0], handPositions[dealer][1]);
       this.deck.setPosition(deckPositions[dealer][0], deckPositions[dealer][1]);
       if (round_count === 1) {
-        this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
-        this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
+        // this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
+        // this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
       }
     }, ALARM_LIMIT * 1000);
   },
@@ -207,8 +207,8 @@ cc.Class({
     this._playerAvatars.forEach((item) => item.stopCountdown());
     setTimeout(() => {
       for (let i = 0; i < 4; i++) {
-        if (!(this._removedCards[i] === null || this._removedCards[i] === undefined))
-          this.removeSelectedCards(this._removedCards[i].user, this._removedCards[i].removedCards);
+        // if (!(this._removedCards[i] === null || this._removedCards[i] === undefined))
+          // this.removeSelectedCards(this._removedCards[i].user, this._removedCards[i].removedCards);
         this._playerHands[this._addCards[i].user].addCards(this._addCards[i].cards);
       }
       this._addCards = [...[]];

@@ -1289,7 +1289,7 @@ export const FakeServer = {
           }
           else if (indexedArray[i].value > 31) {
             item.coin = 2;
-            item.type = "(of others)";
+            item.type = "(of game)";
             this.coins_history[3][winner].play.push({ ...item });
           }
         }

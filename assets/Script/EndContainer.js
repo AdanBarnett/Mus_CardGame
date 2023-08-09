@@ -116,25 +116,25 @@ export default cc.Class({
         if (t1bp > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t1bp, "(instant)");
+            sgc.setValues(t1bp, "(Pass envido)");
             this.team1_big.addChild(sg);
         }
         if (t2bp > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t2bp, "(instant)");
+            sgc.setValues(t2bp, "(Pass envido)");
             this.team2_big.addChild(sg);
         }
         if (t1ba > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t1ba, "(end)");
+            sgc.setValues(t1ba, "(Win envido)");
             this.team1_big.addChild(sg);
         }
         if (t2ba > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t2ba, "(end)");
+            sgc.setValues(t2ba, "(Win envido)");
             this.team2_big.addChild(sg);
         }
 
@@ -146,25 +146,25 @@ export default cc.Class({
         if (t1sp > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t1sp, "(instant)");
+            sgc.setValues(t1sp, "(Pass envido)");
             this.team1_small.addChild(sg);
         }
         if (t2sp > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t2sp, "(instant)");
+            sgc.setValues(t2sp, "(Pass envido)");
             this.team2_small.addChild(sg);
         }
         if (t1sa > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t1sa, "(end)");
+            sgc.setValues(t1sa, "(Win envido)");
             this.team1_small.addChild(sg);
         }
         if (t2sa > 0) {
             let sg = cc.instantiate(this.score_group);
             const sgc = sg.getComponent("ScoreGroup");
-            sgc.setValues(t2sa, "(end)");
+            sgc.setValues(t2sa, "(Win envido)");
             this.team2_small.addChild(sg);
         }
 
