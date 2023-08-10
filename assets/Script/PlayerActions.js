@@ -14,10 +14,11 @@ export default cc.Class({
 
     _amount: 2,
     _currentUser: -1,
+    _discard: false,
+    _timer: -1,
   },
 
-  onLoad() {
-  },
+  onLoad() {},
 
   start() {
     this.showButtonRoot(false);
@@ -61,11 +62,13 @@ export default cc.Class({
           this.betAmountLabel.string = "2 MORE";
           break;
       }
-    })
+    });
     this.showButtonRoot(true);
   },
 
   showDiscardButton(user) {
+    // this._timer = 
+    this._discard = false;
     this._currentUser = user;
     this.musButtonRoot.active = false;
     this.betButtonRoot.active = false;
@@ -90,6 +93,8 @@ export default cc.Class({
   },
 
   onUserDiscardClick() {
+    clearTimeout(this._timer);
+    this._discard = true;
     console.log("onUserDiscardClick : " + this._currentUser);
     var selectedCards = GameScene.getMySelectedCards(this._currentUser);
     // if (selectedCards.length === 0) {
@@ -129,8 +134,7 @@ export default cc.Class({
         this._amount--;
         this.updateBetAmountLabel();
       }
-    }
-    else {
+    } else {
       if (this._amount > 1) {
         this._amount--;
         this.updateBetAmountLabel();
@@ -157,8 +161,7 @@ export default cc.Class({
     console.log("onUserBetOkClick", this._amount);
     if (this.betAmountLabel.string.startsWith("ENVIDO")) {
       ClientCommService.sendEnvido(this._currentUser, this._amount);
-    }
-    else {
+    } else {
       ClientCommService.sendBetMore(this._currentUser, this._amount);
     }
     this.showButtonRoot(false);

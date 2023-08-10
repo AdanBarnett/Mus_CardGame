@@ -8,14 +8,29 @@ import { MESSAGE_TYPE, ROUNDS } from "./Common/Messages";
 import GlobalData from "./Common/GlobalData";
 import PlayerCoins from "./PlayerCoins";
 import EndContainer from "./EndContainer";
-import { FakeServer } from "./Server/FakeServer"
+import { FakeServer } from "./Server/FakeServer";
 import { ALARM_LIMIT, TIME_LIMIT } from "./Common/Constants";
 
 export let GameScene;
 
-const handPositions = [[-384, -236], [211, -134], [57, 274], [-487, 173]];
-const deckPositions = [[-618, -300], [253, -302], [256, 253], [-553, 251]];
-const selected = [[-207, -31], [-94, -31], [18, -31], [132, -31]];
+const handPositions = [
+  [-384, -236],
+  [211, -134],
+  [57, 274],
+  [-487, 173],
+];
+const deckPositions = [
+  [-618, -300],
+  [253, -302],
+  [256, 253],
+  [-553, 251],
+];
+const selected = [
+  [-207, -31],
+  [-94, -31],
+  [18, -31],
+  [132, -31],
+];
 
 cc.Class({
   extends: cc.Component,
@@ -62,16 +77,17 @@ cc.Class({
 
   onLoad() {
     GameScene = this;
-    loadCardAtlas().then(() => {
-      this.start();
-      FakeServer.initHandlers();
-      // setTimeout(() => {
-      FakeServer.startGame();
-      // }, 3000);
-
-    }).catch((error) => {
-      console.log("Error loading card atlas:", error);
-    });
+    loadCardAtlas()
+      .then(() => {
+        this.start();
+        FakeServer.initHandlers();
+        // setTimeout(() => {
+        FakeServer.startGame();
+        // }, 3000);
+      })
+      .catch((error) => {
+        console.log("Error loading card atlas:", error);
+      });
   },
 
   start() {
@@ -105,7 +121,7 @@ cc.Class({
       for (let i = 0; i < this._playerAvatars.length; i++) {
         this._playerAvatars[i].setName("Player " + (i + 1));
         this._playerAvatars[i].setPoint(0);
-        this._playerAvatars[i].setType((i === 0 || i === 3) ? 0 : 1);
+        this._playerAvatars[i].setType(i === 0 || i === 3 ? 0 : 1);
       }
       for (let i = 0; i < this._missions.length; i++) {
         this._missions[i].removeAllChildren();
@@ -147,7 +163,6 @@ cc.Class({
         this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
       }
     }, ALARM_LIMIT * 1000);
-
   },
 
   doMusAlarm(user, mus) {
@@ -185,6 +200,12 @@ cc.Class({
         // this.hand.setPosition(handPositions[user][0], handPositions[user][1]);
         // this.deck.setPosition(deckPositions[user][0], deckPositions[user][1]);
       }
+      let timer = setTimeout(() => {
+        if (!this.playerActions._discard) {
+          this.playerActions.onUserDiscardClick();
+        }
+      }, TIME_LIMIT * 1000);
+      this.playerActions._timer = timer;
     }, ALARM_LIMIT * 1000);
   },
 
@@ -194,7 +215,7 @@ cc.Class({
 
   getMySelectedCards(user) {
     const cards = this._playerHands[user].getSelectedCards();
-    console.log(cards)
+    console.log(cards);
     return cards;
   },
 
@@ -208,8 +229,10 @@ cc.Class({
     setTimeout(() => {
       for (let i = 0; i < 4; i++) {
         // if (!(this._removedCards[i] === null || this._removedCards[i] === undefined))
-          // this.removeSelectedCards(this._removedCards[i].user, this._removedCards[i].removedCards);
-        this._playerHands[this._addCards[i].user].addCards(this._addCards[i].cards);
+        // this.removeSelectedCards(this._removedCards[i].user, this._removedCards[i].removedCards);
+        this._playerHands[this._addCards[i].user].addCards(
+          this._addCards[i].cards
+        );
       }
       this._addCards = [...[]];
       this._removedCards = [...[]];
@@ -235,7 +258,7 @@ cc.Class({
       } else {
         type = 1;
       }
-      let coin = (type === 0) ? Math.floor(coins[user] / 5) : coins[user] % 5;
+      let coin = type === 0 ? Math.floor(coins[user] / 5) : coins[user] % 5;
       this._playerAvatars[user].setPoint(coins[user]);
       this._playerCoins[user].addCoins(coin, worldPosition, type);
     });
@@ -252,7 +275,6 @@ cc.Class({
       this.playerActions.showBetButtons(user, availableActions, state);
       this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
-
   },
   doSmall(user, availableActions, state) {
     this.playerActions.buttonRoot.active = false;
@@ -262,7 +284,6 @@ cc.Class({
       this.playerActions.showBetButtons(user, availableActions, state);
       this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
-
   },
   evalPairs(user) {
     this.playerActions.buttonRoot.active = false;
@@ -271,7 +292,6 @@ cc.Class({
       this.centerPot.setCurrentRound(ROUNDS.EVAL_PAIRS);
       // this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
-
   },
   doPairs(user, availableActions, state) {
     this.playerActions.buttonRoot.active = false;
@@ -281,7 +301,6 @@ cc.Class({
       this.playerActions.showBetButtons(user, availableActions, state);
       this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
-
   },
   evalGame(user) {
     this.playerActions.buttonRoot.active = false;
@@ -290,7 +309,6 @@ cc.Class({
       this.centerPot.setCurrentRound(ROUNDS.EVAL_GAME);
       // this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
-
   },
   doGame(user, availableActions, state) {
     this.playerActions.buttonRoot.active = false;
@@ -300,7 +318,6 @@ cc.Class({
       this.playerActions.showBetButtons(user, availableActions, state);
       this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
-
   },
   // set total coins to winner when end
   sharePoints(user, coins_history, total_coins, points) {
@@ -310,7 +327,9 @@ cc.Class({
       this.centerPot.setCurrentRound(ROUNDS.SHAREPOINTS, points);
       // this.setActivePlayer(user);
       let users = [0, 1, 2, 3];
-      let worldPosition = this.node.convertToWorldSpaceAR(this.node.getPosition());;
+      let worldPosition = this.node.convertToWorldSpaceAR(
+        this.node.getPosition()
+      );
       this.centerPot.removeCoins(ROUNDS.BIG);
       this.centerPot.removeCoins(ROUNDS.SMALL);
       this.centerPot.removeCoins(ROUNDS.PAIRS);
@@ -322,7 +341,10 @@ cc.Class({
         } else {
           type = 1;
         }
-        let coin = (type === 0) ? Math.floor(total_coins[user] / 5) : total_coins[user] % 5;
+        let coin =
+          type === 0
+            ? Math.floor(total_coins[user] / 5)
+            : total_coins[user] % 5;
         this._playerAvatars[user].setPoint(total_coins[user]);
         this._playerCoins[user].addCoins(coin, worldPosition, type);
       });
@@ -341,11 +363,24 @@ cc.Class({
       this.setActivePlayer(user);
     }, ALARM_LIMIT * 1000);
   },
-  doEndRound(coins_history, round_coins, total_coins, endMission, mission_score, points, winner, win_cards, allIn) {
+  doEndRound(
+    coins_history,
+    round_coins,
+    total_coins,
+    endMission,
+    mission_score,
+    points,
+    winner,
+    win_cards,
+    allIn
+  ) {
     this.endRound.selected.active = false;
     this.centerPot.setCurrentRound(ROUNDS.END, points);
     let i = 0;
-    const intervalId = setInterval(() => { this.highlightWinnerCards(i, win_cards); i++; }, ALARM_LIMIT * 1000);
+    const intervalId = setInterval(() => {
+      this.highlightWinnerCards(i, win_cards);
+      i++;
+    }, ALARM_LIMIT * 1000);
     setTimeout(() => {
       for (let i = 0; i < this._playerHands.length; i++) {
         this._playerHands[i].start();
@@ -372,7 +407,17 @@ cc.Class({
         }
       });
     }
-    this.endRound.setValues(coins_history, round_coins, total_coins, endMission, points, winner, win_cards, intervalId, allIn);
+    this.endRound.setValues(
+      coins_history,
+      round_coins,
+      total_coins,
+      endMission,
+      points,
+      winner,
+      win_cards,
+      intervalId,
+      allIn
+    );
     this.endRound.node.active = true;
     if (mission_score[0] === 2 || mission_score[1] === 2) {
       if (mission_score[0] === 2) {
@@ -380,8 +425,7 @@ cc.Class({
           this.endRound.node.active = false;
           this.win.active = true;
         }, (TIME_LIMIT + ALARM_LIMIT) * 1000);
-      }
-      else {
+      } else {
         setTimeout(() => {
           this.endRound.node.active = false;
           this.lose.active = true;

@@ -463,10 +463,10 @@ export const FakeServer = {
     console.log("ask user to discard :" + user)
     ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_DISCARD, { user, dealer: this.dealer, round_count: this.round_count }, -1);
     // this.finishMusDiscard();
-    TimeoutManager.setNextTimeout(() => {
-      console.log("time discard:" + user);
-      this.discardPlayerCard({ user, cards: [] }, 1);
-    });
+    // TimeoutManager.setNextTimeout(() => {
+    //   console.log("time discard:" + user);
+    //   this.discardPlayerCard({ user, cards: [] }, 1);
+    // });
   },
 
   // Called when user discarded cards
@@ -586,7 +586,7 @@ export const FakeServer = {
       }
     }
     else if (["allIn"].includes(this.stateCategory)) {
-      if (!this.envidoState) {
+      // if (!this.envidoState) {
         if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
           return (user + 1) % 4;
         }
@@ -596,33 +596,33 @@ export const FakeServer = {
         else if (users.includes((user + 3) % 4)) {
           return (user + 3) % 4;
         }
-      } else {
-        if (users.includes((user + 1) % 4)
-          && [MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
-        ) {
-          return (user + 1) % 4;
-        } else if (users.includes((user + 3) % 4)) {
-          return (user + 3) % 4;
-        }
-      }
+      // } else {
+      //   if (users.includes((user + 1) % 4)
+      //     && [MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
+      //   ) {
+      //     return (user + 1) % 4;
+      //   } else if (users.includes((user + 3) % 4)) {
+      //     return (user + 3) % 4;
+      //   }
+      // }
     }
     else if (this.stateCategory === "betMore") {
-      if (users.includes((user + 1) % 4)
-        && [MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
-      ) {
-        return (user + 1) % 4;
-      } else if (users.includes((user + 3) % 4)) {
-        return (user + 3) % 4;
-      }
-      // if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
+      // if (users.includes((user + 1) % 4)
+      //   && [MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
+      // ) {
       //   return (user + 1) % 4;
-      // }
-      // else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
-      //   return (user + 1) % 4;
-      // }
-      // else if (users.includes((user + 3) % 4)) {
+      // } else if (users.includes((user + 3) % 4)) {
       //   return (user + 3) % 4;
       // }
+      if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
+        return (user + 1) % 4;
+      }
+      else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
+        return (user + 1) % 4;
+      }
+      else if (users.includes((user + 3) % 4)) {
+        return (user + 3) % 4;
+      }
     }
     else if (this.stateCategory === "pass") {
       if (users.includes((user + 1) % 4) && this.usersState_inCategory[(user + 1) % 4].messageType === "" && (this.usersState_inCategory[(user + 3) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || this.usersState_inCategory[(user + 3) % 4].messageType === "")) {
@@ -1368,10 +1368,10 @@ export const FakeServer = {
       // doesn't come in here
     } else {
       const nextUser = this.setNextUser(user);
-      if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
+      // if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
         this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
         this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
-      }
+      // }
       this.askAction(this.setNextUser(user));
     }
   },
@@ -1393,10 +1393,10 @@ export const FakeServer = {
       // doesn't come in here
     } else {
       const nextUser = this.setNextUser(user);
-      if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
+      // if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
         this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
         this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
-      }
+      // }
       this.askAction(nextUser);
     }
   },
@@ -1415,10 +1415,10 @@ export const FakeServer = {
       // doesn't come in here
     } else {
       const nextUser = this.setNextUser(user);
-      if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
+      // if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
         this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
         this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
-      }
+      // }
       this.askAction(this.setNextUser(user));
     }
   },
