@@ -17,8 +17,8 @@ let item_history = {
 
 // divide array by divisor and sort by decresing order
 function divideArrayItems(array, divisor) {
-  let dividedArray = array.map(item => (item % divisor) + 1);
-  dividedArray = dividedArray.map(num => {
+  let dividedArray = array.map((item) => (item % divisor) + 1);
+  dividedArray = dividedArray.map((num) => {
     // if (num === 2) return 1;
     // if (num === 3) return 12;
     return num;
@@ -27,11 +27,10 @@ function divideArrayItems(array, divisor) {
   return [...dividedArray];
 }
 
-
 // find a card group for pairs
 function findCombination(cards) {
   // Replace 12 with 1 and 3 with 12 in the input array
-  let numbers = cards.map(num => {
+  let numbers = cards.map((num) => {
     if (num === 2) return 1;
     if (num === 3) return 12;
     return num;
@@ -48,7 +47,7 @@ function findCombination(cards) {
   // Check if there are 2 combinations of the same digits
   if (new Set(numbers).size === 2) {
     for (let num of new Set(numbers)) {
-      if (numbers.filter(n => n === num).length === 2) {
+      if (numbers.filter((n) => n === num).length === 2) {
         return numbers;
       }
     }
@@ -56,14 +55,14 @@ function findCombination(cards) {
 
   // Check if three digits are the same
   for (let num of new Set(numbers)) {
-    if (numbers.filter(n => n === num).length === 3) {
+    if (numbers.filter((n) => n === num).length === 3) {
       return [num, num, num];
     }
   }
 
   // Check if two digits are the same
   for (let num of new Set(numbers)) {
-    if (numbers.filter(n => n === num).length === 2) {
+    if (numbers.filter((n) => n === num).length === 2) {
       return [num, num];
     }
   }
@@ -71,7 +70,6 @@ function findCombination(cards) {
   // If none of the conditions are satisfied, return an empty array
   return [];
 }
-
 
 // calculate sum of player's cards
 function calculateSum(cards) {
@@ -105,7 +103,7 @@ numberSequence.forEach((num, index) => {
 });
 
 // Custom comparator function
-function customComparator(a, b) {
+function customComparator(a, b, dealer) {
   const orderA = order.get(a.value);
   const orderB = order.get(b.value);
 
@@ -114,7 +112,7 @@ function customComparator(a, b) {
   } else if (orderA > orderB) {
     return 1;
   } else {
-    return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4;
+    return ((a.index - dealer + 4) % 4) - ((b.index - dealer + 4) % 4);
   }
 }
 
@@ -153,10 +151,13 @@ const TimeoutManager = {
   nextAction: null,
 
   setNextTimeout(callback, timeLimit) {
-    this.timeoutHandler = setTimeout(() => {
-      callback();
-      // this.timeoutHandler = null;
-    }, (timeLimit) ? (timeLimit * 1000) : ((TIME_LIMIT + ALARM_LIMIT) * 1000));
+    this.timeoutHandler = setTimeout(
+      () => {
+        callback();
+        // this.timeoutHandler = null;
+      },
+      timeLimit ? timeLimit * 1000 : (TIME_LIMIT + ALARM_LIMIT) * 1000
+    );
   },
 
   clearNextTimeout() {
@@ -168,22 +169,25 @@ const TimeoutManager = {
 };
 
 function sumArray(array) {
-  return array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-};
+  return array.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+}
 
 export const FakeServer = {
   deckCards: [], // cards of deck (1~40)
   discardedCards: [], // discarded cards
   playerCards: [], // cards of players
   playerCardsEval: [], // divided cards by 12 of players
-  playerPairCards: [], // available card groups for pair category 
+  playerPairCards: [], // available card groups for pair category
   playersCardsSum: [], // available card groups for game category
-  currRound: null,  // state of round (ROUNDS.)
+  currRound: null, // state of round (ROUNDS.)
   dealer: -1, // dealer of game
   repliedUsers: [], // already replied users
-  bet_coins: [0, 0, 0, 0],   // betted coins in category
-  total_coins: [0, 0, 0, 0],  // total coins of mission
-  round_coins: [0, 0, 0, 0],  // total coins of round
+  bet_coins: [0, 0, 0, 0], // betted coins in category
+  total_coins: [0, 0, 0, 0], // total coins of mission
+  round_coins: [0, 0, 0, 0], // total coins of round
   // the score of round (e: [1, 0] )
   mission_score: [0, 0], // the score of mission
   usersState_inCategory: [], // states of players in specific category (e.g. pass, envido, ...)
@@ -192,14 +196,29 @@ export const FakeServer = {
   endMission: false, // end flag of mission
   endGame: false, // end flag of game
   stateCategory: "", // the state of current category (e.g. pass, envido, ...)
-  prevAvAction: null, // previous available actions 
+  prevAvAction: null, // previous available actions
   // history of each players in every category
   coins_history: [
-    [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-    [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-    [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-    [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-    [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
+    [
+      { ...item_history, play: [...item_history.play] },
+      { ...item_history, play: [...item_history.play] },
+    ],
+    [
+      { ...item_history, play: [...item_history.play] },
+      { ...item_history, play: [...item_history.play] },
+    ],
+    [
+      { ...item_history, play: [...item_history.play] },
+      { ...item_history, play: [...item_history.play] },
+    ],
+    [
+      { ...item_history, play: [...item_history.play] },
+      { ...item_history, play: [...item_history.play] },
+    ],
+    [
+      { ...item_history, play: [...item_history.play] },
+      { ...item_history, play: [...item_history.play] },
+    ],
   ],
   envidoState: false, // state of envido
   availableUsers: [], // available players for pair
@@ -212,7 +231,7 @@ export const FakeServer = {
     { user: -1, cards: [] },
     { user: -1, cards: [] },
     { user: -1, cards: [] },
-    { user: -1, cards: [] }
+    { user: -1, cards: [] },
   ],
   allIn: -1,
 
@@ -251,11 +270,11 @@ export const FakeServer = {
     );
   },
 
-
   // start of game
   startGame() {
     this.mission_score = [0, 0];
     this.dealer = -1;
+    this.round_count = 0;
     this.startMission();
     this.endGame = false;
   },
@@ -265,7 +284,7 @@ export const FakeServer = {
     this.total_coins = [0, 0, 0, 0];
     this.endMission = false;
     this.winner = -1;
-    this.round_count = 0;
+    // this.round_count = 0;
     this.allIn = -1;
     this.startRound();
   },
@@ -283,18 +302,33 @@ export const FakeServer = {
     this.round_coins = [0, 0, 0, 0];
     this.points = false;
     this.coins_history = [
-      [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-      [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-      [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-      [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
-      [{ ...item_history, play: [...item_history.play] }, { ...item_history, play: [...item_history.play] }],
+      [
+        { ...item_history, play: [...item_history.play] },
+        { ...item_history, play: [...item_history.play] },
+      ],
+      [
+        { ...item_history, play: [...item_history.play] },
+        { ...item_history, play: [...item_history.play] },
+      ],
+      [
+        { ...item_history, play: [...item_history.play] },
+        { ...item_history, play: [...item_history.play] },
+      ],
+      [
+        { ...item_history, play: [...item_history.play] },
+        { ...item_history, play: [...item_history.play] },
+      ],
+      [
+        { ...item_history, play: [...item_history.play] },
+        { ...item_history, play: [...item_history.play] },
+      ],
     ];
     this.win_cards = [
       { user: -1, cards: [] },
       { user: -1, cards: [] },
       { user: -1, cards: [] },
-      { user: -1, cards: [] }
-    ]
+      { user: -1, cards: [] },
+    ];
     this._generateDeck();
     for (let i = 0; i < PLAYER_CNT; i++) {
       this.playerCards[i] = [];
@@ -400,11 +434,7 @@ export const FakeServer = {
 
   sendAlarmToAllUsers(messageType, param, room) {
     // for (let i = 0; i < PLAYER_CNT; i++) {
-    ServerCommService.send(
-      messageType,
-      param,
-      [0, 1, 2, 3]
-    );
+    ServerCommService.send(messageType, param, [0, 1, 2, 3]);
     // }
   },
 
@@ -419,7 +449,11 @@ export const FakeServer = {
   // Ask user to claim Mus
   askMusClaim(user) {
     console.log("ask user to claim mus : " + user);
-    ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_CLAIM, { user, round_count: this.round_count, dealer: this.dealer }, user);
+    ServerCommService.send(
+      MESSAGE_TYPE.SC_DO_MUS_CLAIM,
+      { user, round_count: this.round_count, dealer: this.dealer },
+      user
+    );
 
     TimeoutManager.setNextTimeout(() => {
       this.claimMus({ mus: true, user });
@@ -428,7 +462,9 @@ export const FakeServer = {
 
   // Called when user claimed Mus
   claimMus(params, room) {
-    console.log("called when user claimed mus : " + params.user + ", mus :" + params.mus);
+    console.log(
+      "called when user claimed mus : " + params.user + ", mus :" + params.mus
+    );
     TimeoutManager.clearNextTimeout();
     const mus = params.mus;
     const user = params.user;
@@ -440,8 +476,7 @@ export const FakeServer = {
     if (mus) {
       if (this.isAllUsersReplied()) {
         this.setCurrentRound(ROUNDS.MUS_DISCARD);
-        if (this.round_count === 1)
-          this.dealer = (user + 2) % PLAYER_CNT;
+        if (this.round_count === 1) this.dealer = (user + 2) % PLAYER_CNT;
         this.askMusDiscard(this.dealer);
       } else {
         console.log("ask:" + (user + 1));
@@ -451,17 +486,19 @@ export const FakeServer = {
       for (let i = 0; i < PLAYER_CNT; i++) {
         this.playerCardsEval[i] = divideArrayItems(this.playerCards[i], 12);
       }
-      if (this.round_count === 1)
-        this.dealer = user;
+      if (this.round_count === 1) this.dealer = user;
       this.startCategory();
     }
   },
 
-
   // Ask user to discard cards
   askMusDiscard(user) {
-    console.log("ask user to discard :" + user)
-    ServerCommService.send(MESSAGE_TYPE.SC_DO_MUS_DISCARD, { user, dealer: this.dealer, round_count: this.round_count }, -1);
+    console.log("ask user to discard :" + user);
+    ServerCommService.send(
+      MESSAGE_TYPE.SC_DO_MUS_DISCARD,
+      { user, dealer: this.dealer, round_count: this.round_count },
+      -1
+    );
     // this.finishMusDiscard();
     // TimeoutManager.setNextTimeout(() => {
     //   console.log("time discard:" + user);
@@ -480,7 +517,11 @@ export const FakeServer = {
       return;
     }
     //Alarm to users
-    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_DISCARD_ALARM, { user, cards }, 1);
+    this.sendAlarmToAllUsers(
+      MESSAGE_TYPE.SC_DO_DISCARD_ALARM,
+      { user, cards },
+      1
+    );
 
     this.playerCards[user] = this.playerCards[user].filter(
       (card) => !cards.includes(card)
@@ -544,13 +585,31 @@ export const FakeServer = {
       // this.winnerOfCategory = this.getWinnerInCategory(users);
     }
     if (this.stateCategory === "pass") {
-      if (([MESSAGE_TYPE.CS_ACTION_ALLIN, MESSAGE_TYPE.CS_ACTION_BET_MORE, MESSAGE_TYPE.CS_ACTION_ENVIDO].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
-        || [MESSAGE_TYPE.CS_ACTION_ALLIN, MESSAGE_TYPE.CS_ACTION_BET_MORE, MESSAGE_TYPE.CS_ACTION_ENVIDO].includes(this.usersState_inCategory[(user + 3) % 4].messageType))
-        && ((this.usersState_inCategory[(user + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) || !users.includes((user + 2) % 4))) {
+      if (
+        ([
+          MESSAGE_TYPE.CS_ACTION_ALLIN,
+          MESSAGE_TYPE.CS_ACTION_BET_MORE,
+          MESSAGE_TYPE.CS_ACTION_ENVIDO,
+        ].includes(this.usersState_inCategory[(user + 1) % 4].messageType) ||
+          [
+            MESSAGE_TYPE.CS_ACTION_ALLIN,
+            MESSAGE_TYPE.CS_ACTION_BET_MORE,
+            MESSAGE_TYPE.CS_ACTION_ENVIDO,
+          ].includes(this.usersState_inCategory[(user + 3) % 4].messageType)) &&
+        (this.usersState_inCategory[(user + 2) % 4].messageType ===
+          MESSAGE_TYPE.CS_ACTION_PASS ||
+          !users.includes((user + 2) % 4))
+      ) {
         this.endCategory = true;
       }
-      if ((this.usersState_inCategory[(user + 1) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || !users.includes((user + 1) % 4))
-        && (this.usersState_inCategory[(user + 3) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || !users.includes((user + 3) % 4))) {
+      if (
+        (this.usersState_inCategory[(user + 1) % 4].messageType ===
+          MESSAGE_TYPE.CS_ACTION_PASS ||
+          !users.includes((user + 1) % 4)) &&
+        (this.usersState_inCategory[(user + 3) % 4].messageType ===
+          MESSAGE_TYPE.CS_ACTION_PASS ||
+          !users.includes((user + 3) % 4))
+      ) {
         if (users.includes((user + 2) % 4)) {
           if (this.usersState_inCategory[(user + 2) % 4].messageType !== "") {
             this.endCategory = true;
@@ -575,27 +634,36 @@ export const FakeServer = {
       users = [0, 1, 2, 3];
     }
     if (["envido"].includes(this.stateCategory)) {
-      if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
+      if (
+        users.includes((user + 1) % 4) &&
+        ((user + 1 - this.dealer + 4) % 4 === 1 ||
+          (user + 1 - this.dealer + 4) % 4 === 0)
+      ) {
         return (user + 1) % 4;
-      }
-      else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
+      } else if (
+        users.includes((user + 1) % 4) &&
+        !users.includes((user + 3) % 4)
+      ) {
         return (user + 1) % 4;
-      }
-      else if (users.includes((user + 3) % 4)) {
+      } else if (users.includes((user + 3) % 4)) {
         return (user + 3) % 4;
       }
-    }
-    else if (["allIn"].includes(this.stateCategory)) {
+    } else if (["allIn"].includes(this.stateCategory)) {
       // if (!this.envidoState) {
-        if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
-          return (user + 1) % 4;
-        }
-        else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
-          return (user + 1) % 4;
-        }
-        else if (users.includes((user + 3) % 4)) {
-          return (user + 3) % 4;
-        }
+      if (
+        users.includes((user + 1) % 4) &&
+        ((user + 1 - this.dealer + 4) % 4 === 1 ||
+          (user + 1 - this.dealer + 4) % 4 === 0)
+      ) {
+        return (user + 1) % 4;
+      } else if (
+        users.includes((user + 1) % 4) &&
+        !users.includes((user + 3) % 4)
+      ) {
+        return (user + 1) % 4;
+      } else if (users.includes((user + 3) % 4)) {
+        return (user + 3) % 4;
+      }
       // } else {
       //   if (users.includes((user + 1) % 4)
       //     && [MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
@@ -605,8 +673,7 @@ export const FakeServer = {
       //     return (user + 3) % 4;
       //   }
       // }
-    }
-    else if (this.stateCategory === "betMore") {
+    } else if (this.stateCategory === "betMore") {
       // if (users.includes((user + 1) % 4)
       //   && [MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[(user + 1) % 4].messageType)
       // ) {
@@ -614,24 +681,41 @@ export const FakeServer = {
       // } else if (users.includes((user + 3) % 4)) {
       //   return (user + 3) % 4;
       // }
-      if (users.includes((user + 1) % 4) && ((user + 1 - this.dealer + 4) % 4 === 1 || (user + 1 - this.dealer + 4) % 4 === 0)) {
+      if (
+        users.includes((user + 1) % 4) &&
+        ((user + 1 - this.dealer + 4) % 4 === 1 ||
+          (user + 1 - this.dealer + 4) % 4 === 0)
+      ) {
         return (user + 1) % 4;
-      }
-      else if (users.includes((user + 1) % 4) && !users.includes((user + 3) % 4)) {
+      } else if (
+        users.includes((user + 1) % 4) &&
+        !users.includes((user + 3) % 4)
+      ) {
         return (user + 1) % 4;
-      }
-      else if (users.includes((user + 3) % 4)) {
+      } else if (users.includes((user + 3) % 4)) {
         return (user + 3) % 4;
       }
-    }
-    else if (this.stateCategory === "pass") {
-      if (users.includes((user + 1) % 4) && this.usersState_inCategory[(user + 1) % 4].messageType === "" && (this.usersState_inCategory[(user + 3) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || this.usersState_inCategory[(user + 3) % 4].messageType === "")) {
+    } else if (this.stateCategory === "pass") {
+      if (
+        users.includes((user + 1) % 4) &&
+        this.usersState_inCategory[(user + 1) % 4].messageType === "" &&
+        (this.usersState_inCategory[(user + 3) % 4].messageType ===
+          MESSAGE_TYPE.CS_ACTION_PASS ||
+          this.usersState_inCategory[(user + 3) % 4].messageType === "")
+      ) {
         return (user + 1) % 4;
-      }
-      else if (users.includes((user + 2) % 4) && this.usersState_inCategory[(user + 2) % 4].messageType === "") {
+      } else if (
+        users.includes((user + 2) % 4) &&
+        this.usersState_inCategory[(user + 2) % 4].messageType === ""
+      ) {
         return (user + 2) % 4;
-      }
-      else if (users.includes((user + 3) % 4) && this.usersState_inCategory[(user + 3) % 4].messageType === "" && (this.usersState_inCategory[(user + 1) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS || this.usersState_inCategory[(user + 1) % 4].messageType === "")) {
+      } else if (
+        users.includes((user + 3) % 4) &&
+        this.usersState_inCategory[(user + 3) % 4].messageType === "" &&
+        (this.usersState_inCategory[(user + 1) % 4].messageType ===
+          MESSAGE_TYPE.CS_ACTION_PASS ||
+          this.usersState_inCategory[(user + 1) % 4].messageType === "")
+      ) {
         return (user + 3) % 4;
       }
     }
@@ -653,15 +737,13 @@ export const FakeServer = {
         break;
       case ROUNDS.EVAL_PAIRS:
         if (this.availableUsers.length < 2) {
-          if (this.availableUsers.length === 1)
-            this.calcCoinInCategory();
+          if (this.availableUsers.length === 1) this.calcCoinInCategory();
           this.currRound = ROUNDS.EVAL_GAME;
           this.availableUsersForGame = this.getUsersForGame();
         } else if (this.availableUsers.length === 2) {
           if ((this.availableUsers[0] + this.availableUsers[1]) % 2 === 1) {
             this.currRound = ROUNDS.PAIRS;
-          }
-          else {
+          } else {
             this.calcCoinInCategory();
             this.currRound = ROUNDS.EVAL_GAME;
             this.availableUsersForGame = this.getUsersForGame();
@@ -683,10 +765,13 @@ export const FakeServer = {
           this.calcCoinInCategory();
           this.currRound = ROUNDS.SHAREPOINTS;
         } else if (this.availableUsersForGame.length === 2) {
-          if ((this.availableUsersForGame[0] + this.availableUsersForGame[1]) % 2 === 1) {
+          if (
+            (this.availableUsersForGame[0] + this.availableUsersForGame[1]) %
+              2 ===
+            1
+          ) {
             this.currRound = ROUNDS.GAME;
-          }
-          else {
+          } else {
             this.calcCoinInCategory();
             this.currRound = ROUNDS.SHAREPOINTS;
           }
@@ -707,20 +792,21 @@ export const FakeServer = {
       // case ROUNDS.END:
       //   this.currRound = ROUNDS.END;
       // break;
-      default: 0;
+      default:
+        0;
     }
     let dealer = this.dealer;
     if (this.currRound === ROUNDS.PAIRS) {
       let array = [];
       for (let i = 0; i < this.availableUsers.length; i++) {
-        array.push((this.availableUsers[i] - dealer + 4) % 4)
+        array.push((this.availableUsers[i] - dealer + 4) % 4);
       }
       dealer = (Math.min(...array) + dealer) % 4;
     }
     if (this.currRound === ROUNDS.GAME) {
       let array = [];
       for (let i = 0; i < this.availableUsersForGame.length; i++) {
-        array.push((this.availableUsersForGame[i] - dealer + 4) % 4)
+        array.push((this.availableUsersForGame[i] - dealer + 4) % 4);
       }
       dealer = (Math.min(...array) + dealer) % 4;
     }
@@ -731,7 +817,11 @@ export const FakeServer = {
   getAvailableActions() {
     switch (this.stateCategory) {
       case "start":
-        this.prevAvAction = [MESSAGE_TYPE.CS_ACTION_PASS, MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_ALLIN];
+        this.prevAvAction = [
+          MESSAGE_TYPE.CS_ACTION_PASS,
+          MESSAGE_TYPE.CS_ACTION_ENVIDO,
+          MESSAGE_TYPE.CS_ACTION_ALLIN,
+        ];
         return this.prevAvAction;
       case "pass":
         // if (this.envidoState) {
@@ -743,19 +833,33 @@ export const FakeServer = {
         // }
         return this.prevAvAction;
       case "envido":
-        this.prevAvAction = [MESSAGE_TYPE.CS_ACTION_PASS, MESSAGE_TYPE.CS_ACTION_ACCEPT, MESSAGE_TYPE.CS_ACTION_BET_MORE, MESSAGE_TYPE.CS_ACTION_ALLIN];
+        this.prevAvAction = [
+          MESSAGE_TYPE.CS_ACTION_PASS,
+          MESSAGE_TYPE.CS_ACTION_ACCEPT,
+          MESSAGE_TYPE.CS_ACTION_BET_MORE,
+          MESSAGE_TYPE.CS_ACTION_ALLIN,
+        ];
         return this.prevAvAction;
       case "betMore":
-        this.prevAvAction = [MESSAGE_TYPE.CS_ACTION_PASS, MESSAGE_TYPE.CS_ACTION_ACCEPT, MESSAGE_TYPE.CS_ACTION_BET_MORE, MESSAGE_TYPE.CS_ACTION_ALLIN];
+        this.prevAvAction = [
+          MESSAGE_TYPE.CS_ACTION_PASS,
+          MESSAGE_TYPE.CS_ACTION_ACCEPT,
+          MESSAGE_TYPE.CS_ACTION_BET_MORE,
+          MESSAGE_TYPE.CS_ACTION_ALLIN,
+        ];
         return this.prevAvAction;
       case "allIn":
-        this.prevAvAction = [MESSAGE_TYPE.CS_ACTION_PASS, MESSAGE_TYPE.CS_ACTION_ACCEPT];
+        this.prevAvAction = [
+          MESSAGE_TYPE.CS_ACTION_PASS,
+          MESSAGE_TYPE.CS_ACTION_ACCEPT,
+        ];
         return this.prevAvAction;
       case "accept":
         this.prevAvAction = [];
         return this.prevAvAction;
       // break;
-      default: return this.prevAvAction;
+      default:
+        return this.prevAvAction;
     }
   },
 
@@ -791,7 +895,7 @@ export const FakeServer = {
       user,
       availableActions,
       state: this.stateCategory,
-    }
+    };
     switch (this.currRound) {
       case ROUNDS.BIG:
         ServerCommService.send(MESSAGE_TYPE.SC_DO_BIG, params, user);
@@ -828,36 +932,49 @@ export const FakeServer = {
               this.total_coins[j + 2] += value.coin;
               this.round_coins[j] += value.coin;
               this.round_coins[j + 2] += value.coin;
-            })
-          })
-        })
-        params = { user, coins_history: this.coins_history, total_coins: this.total_coins, endMission: this.endMission, points: this.points, winner: this.winner };
+            });
+          });
+        });
+        params = {
+          user,
+          coins_history: this.coins_history,
+          total_coins: this.total_coins,
+          endMission: this.endMission,
+          points: this.points,
+          winner: this.winner,
+        };
         ServerCommService.send(MESSAGE_TYPE.SC_SHARE_POINT, params, user);
         // this.startCategory();
         break;
       case ROUNDS.END:
-        if (!this.endMission)
-          this.estimateEndOfMission();
-        params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score, points: this.points, winner: this.winner, win_cards: this.win_cards, allIn: this.allIn };
+        if (!this.endMission) this.estimateEndOfMission();
+        params = {
+          coins_history: this.coins_history,
+          round_coins: this.round_coins,
+          total_coins: this.total_coins,
+          endMission: this.endMission,
+          mission_score: this.mission_score,
+          points: this.points,
+          winner: this.winner,
+          win_cards: this.win_cards,
+          allIn: this.allIn,
+        };
         ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
         if (this.mission_score[0] === 2 || this.mission_score[1] === 2) {
           this.endGame = true;
         }
         break;
-
     }
     if (this.currRound !== ROUNDS.END) {
       if ([ROUNDS.EVAL_GAME, ROUNDS.EVAL_PAIRS].includes(this.currRound)) {
         TimeoutManager.setNextTimeout(() => {
           this.eval({ user }, 1);
         }, ALARM_LIMIT);
-      }
-      else if (this.currRound === ROUNDS.SHAREPOINTS) {
+      } else if (this.currRound === ROUNDS.SHAREPOINTS) {
         TimeoutManager.setNextTimeout(() => {
           this.endShareMode();
         }, 5);
-      }
-      else {
+      } else {
         TimeoutManager.setNextTimeout(() => {
           this.pass({ user }, 1);
         });
@@ -919,12 +1036,22 @@ export const FakeServer = {
     if (!this.markUserReplied(user)) {
       return;
     }
-    let users = (this.currRound === ROUNDS.EVAL_PAIRS) ? [...this.availableUsers] : [...this.availableUsersForGame];
+    let users =
+      this.currRound === ROUNDS.EVAL_PAIRS
+        ? [...this.availableUsers]
+        : [...this.availableUsersForGame];
     if (users.includes(user)) {
-      this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "Yes" }, 1);
-    }
-    else {
-      this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "No" }, 1);
+      this.sendAlarmToAllUsers(
+        MESSAGE_TYPE.SC_DO_ALARM,
+        { user, content: "Yes" },
+        1
+      );
+    } else {
+      this.sendAlarmToAllUsers(
+        MESSAGE_TYPE.SC_DO_ALARM,
+        { user, content: "No" },
+        1
+      );
     }
     if (this.isAllUsersReplied()) {
       this.startCategory();
@@ -946,12 +1073,10 @@ export const FakeServer = {
     let players = [...this.playerCardsEval];
     for (let i = 0; i < PLAYER_CNT; i++) {
       players[i] = players[i].map((num) => {
-        if (num === 2)
-          return 1;
-        if (num === 3)
-          return 12;
+        if (num === 2) return 1;
+        if (num === 3) return 12;
         return num;
-      })
+      });
     }
     let playerPairCards = [...this.playerPairCards];
     let playersCardsSum = [...this.playersCardsSum];
@@ -970,10 +1095,13 @@ export const FakeServer = {
       return winner;
     }
     for (let i = 0; i < users.length; i++) {
-      if (this.usersState_inCategory[users[i]].messageType === MESSAGE_TYPE.CS_ACTION_ACCEPT) {
+      if (
+        this.usersState_inCategory[users[i]].messageType ===
+        MESSAGE_TYPE.CS_ACTION_ACCEPT
+      ) {
         if (this.currRound === ROUNDS.BIG) {
           players.map((value) => {
-            return value.sort((a, b) => (b - a));
+            return value.sort((a, b) => b - a);
           });
           indexedArray = players.map((value, index) => ({ value, index }));
           indexedArray.sort((a, b) => {
@@ -983,17 +1111,19 @@ export const FakeServer = {
               }
             }
             if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+              return (
+                ((a.index - this.dealer + 4) % 4) -
+                ((b.index - this.dealer + 4) % 4)
+              );
             }
           });
-          const sortedIndices = indexedArray.map(obj => obj.index);
+          const sortedIndices = indexedArray.map((obj) => obj.index);
           winner = sortedIndices[0];
           this.win_cards[0].user = winner;
           this.win_cards[0].cards = [...this.playerCards[winner]];
-        }
-        else if (this.currRound === ROUNDS.SMALL) {
+        } else if (this.currRound === ROUNDS.SMALL) {
           players.map((value) => {
-            return value.sort((a, b) => (a - b));
+            return value.sort((a, b) => a - b);
           });
           indexedArray = players.map((value, index) => ({ value, index }));
           indexedArray.sort((a, b) => {
@@ -1003,68 +1133,83 @@ export const FakeServer = {
               }
             }
             if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+              return (
+                ((a.index - this.dealer + 4) % 4) -
+                ((b.index - this.dealer + 4) % 4)
+              );
             }
           });
-          const sortedIndices = indexedArray.map(obj => obj.index);
+          const sortedIndices = indexedArray.map((obj) => obj.index);
           winner = sortedIndices[0];
           this.win_cards[1].user = winner;
           this.win_cards[1].cards = [...this.playerCards[winner]];
-        }
-        else if (this.currRound === ROUNDS.PAIRS) {
-          indexedArray = playerPairCards.map((value, index) => ({ value, index }));
+        } else if (this.currRound === ROUNDS.PAIRS) {
+          indexedArray = playerPairCards.map((value, index) => ({
+            value,
+            index,
+          }));
           indexedArray.sort((a, b) => {
             if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
-            }
-            else if (a.value.length === b.value.length) {
+              return (
+                ((a.index - this.dealer + 4) % 4) -
+                ((b.index - this.dealer + 4) % 4)
+              );
+            } else if (a.value.length === b.value.length) {
               if (b.value[0] === a.value[0]) {
                 return b.value[2] - a.value[2];
-              }
-              else return b.value[0] - a.value[0];
+              } else return b.value[0] - a.value[0];
             } else {
               return b.value.length - a.value.length;
             }
           });
           // Get the original indices after sorting
-          const sortedIndices = indexedArray.map(obj => obj.index);
+          const sortedIndices = indexedArray.map((obj) => obj.index);
           winner = sortedIndices[0];
           this.win_cards[2].user = winner;
           this.win_cards[2].cards = [...this.playerCards[winner]];
-        }
-        else if (this.currRound === ROUNDS.GAME) {
-          indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
-          indexedArray.sort(customComparator);
-          const sortedIndices = indexedArray.map(obj => obj.index);
+        } else if (this.currRound === ROUNDS.GAME) {
+          indexedArray = playersCardsSum.map((value, index) => ({
+            value,
+            index,
+          }));
+          indexedArray.sort((a, b) => customComparator(a, b, this.dealer));
+          const sortedIndices = indexedArray.map((obj) => obj.index);
           winner = sortedIndices[0];
           this.win_cards[3].user = winner;
           this.win_cards[3].cards = [...this.playerCards[winner]];
-        }
-        else if (this.currRound === ROUNDS.POINTS) {
-          indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
+        } else if (this.currRound === ROUNDS.POINTS) {
+          indexedArray = playersCardsSum.map((value, index) => ({
+            value,
+            index,
+          }));
           indexedArray.sort((a, b) => {
             if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-              return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
-            }
-            else if (b.value !== a.value) {
-              return b.value - a.value
+              return (
+                ((a.index - this.dealer + 4) % 4) -
+                ((b.index - this.dealer + 4) % 4)
+              );
+            } else if (b.value !== a.value) {
+              return b.value - a.value;
             }
           });
-          const sortedIndices = indexedArray.map(obj => obj.index);
+          const sortedIndices = indexedArray.map((obj) => obj.index);
           winner = sortedIndices[0];
           this.win_cards[3].user = winner;
           this.win_cards[3].cards = [...this.playerCards[winner]];
         }
         return winner;
       }
-      if (this.usersState_inCategory[users[i]].messageType !== MESSAGE_TYPE.CS_ACTION_PASS) {
+      if (
+        this.usersState_inCategory[users[i]].messageType !==
+        MESSAGE_TYPE.CS_ACTION_PASS
+      ) {
         pass = false;
       }
     }
     if (pass) {
       if (this.currRound === ROUNDS.BIG) {
         players.map((value) => {
-          return value.sort((a, b) => (b - a));
+          return value.sort((a, b) => b - a);
         });
         indexedArray = players.map((value, index) => ({ value, index }));
         indexedArray.sort((a, b) => {
@@ -1074,17 +1219,19 @@ export const FakeServer = {
             }
           }
           if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+            return (
+              ((a.index - this.dealer + 4) % 4) -
+              ((b.index - this.dealer + 4) % 4)
+            );
           }
         });
-        const sortedIndices = indexedArray.map(obj => obj.index);
+        const sortedIndices = indexedArray.map((obj) => obj.index);
         winner = sortedIndices[0];
         this.win_cards[0].user = winner;
         this.win_cards[0].cards = [...this.playerCards[winner]];
-      }
-      else if (this.currRound === ROUNDS.SMALL) {
+      } else if (this.currRound === ROUNDS.SMALL) {
         players.map((value) => {
-          return value.sort((a, b) => (a - b));
+          return value.sort((a, b) => a - b);
         });
         indexedArray = players.map((value, index) => ({ value, index }));
         indexedArray.sort((a, b) => {
@@ -1094,54 +1241,66 @@ export const FakeServer = {
             }
           }
           if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
+            return (
+              ((a.index - this.dealer + 4) % 4) -
+              ((b.index - this.dealer + 4) % 4)
+            );
           }
         });
-        const sortedIndices = indexedArray.map(obj => obj.index);
+        const sortedIndices = indexedArray.map((obj) => obj.index);
         winner = sortedIndices[0];
         this.win_cards[1].user = winner;
         this.win_cards[1].cards = [...this.playerCards[winner]];
-      }
-      else if (this.currRound === ROUNDS.PAIRS) {
-        indexedArray = playerPairCards.map((value, index) => ({ value, index }));
+      } else if (this.currRound === ROUNDS.PAIRS) {
+        indexedArray = playerPairCards.map((value, index) => ({
+          value,
+          index,
+        }));
         indexedArray.sort((a, b) => {
           if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
-          }
-          else if (a.value.length === b.value.length) {
+            return (
+              ((a.index - this.dealer + 4) % 4) -
+              ((b.index - this.dealer + 4) % 4)
+            );
+          } else if (a.value.length === b.value.length) {
             if (b.value[0] === a.value[0]) {
               return b.value[2] - a.value[2];
-            }
-            else return b.value[0] - a.value[0];
+            } else return b.value[0] - a.value[0];
           } else {
             return b.value.length - a.value.length;
           }
         });
         // Get the original indices after sorting
-        const sortedIndices = indexedArray.map(obj => obj.index);
+        const sortedIndices = indexedArray.map((obj) => obj.index);
         winner = sortedIndices[0];
         this.win_cards[2].user = winner;
         this.win_cards[2].cards = [...this.playerCards[winner]];
-      }
-      else if (this.currRound === ROUNDS.GAME) {
-        indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
-        indexedArray.sort(customComparator);
-        const sortedIndices = indexedArray.map(obj => obj.index);
+      } else if (this.currRound === ROUNDS.GAME) {
+        indexedArray = playersCardsSum.map((value, index) => ({
+          value,
+          index,
+        }));
+        indexedArray.sort((a, b) => customComparator(a, b, this.dealer));
+        const sortedIndices = indexedArray.map((obj) => obj.index);
         winner = sortedIndices[0];
         this.win_cards[3].user = winner;
         this.win_cards[3].cards = [...this.playerCards[winner]];
-      }
-      else if (this.currRound === ROUNDS.POINTS) {
-        indexedArray = playersCardsSum.map((value, index) => ({ value, index }));
+      } else if (this.currRound === ROUNDS.POINTS) {
+        indexedArray = playersCardsSum.map((value, index) => ({
+          value,
+          index,
+        }));
         indexedArray.sort((a, b) => {
           if (JSON.stringify(a.value) === JSON.stringify(b.value)) {
-            return (a.index - this.dealer + 4) % 4 - (b.index - this.dealer + 4) % 4
-          }
-          else if (b.value !== a.value) {
-            return b.value - a.value
+            return (
+              ((a.index - this.dealer + 4) % 4) -
+              ((b.index - this.dealer + 4) % 4)
+            );
+          } else if (b.value !== a.value) {
+            return b.value - a.value;
           }
         });
-        const sortedIndices = indexedArray.map(obj => obj.index);
+        const sortedIndices = indexedArray.map((obj) => obj.index);
         console.log(sortedIndices);
         winner = sortedIndices[0];
         this.win_cards[3].user = winner;
@@ -1150,26 +1309,28 @@ export const FakeServer = {
       return winner;
     } else {
       for (let i = 0; i < users.length; i++) {
-        console.log("ccccccccccccccccccccccccccc: ", i)
-        if ([MESSAGE_TYPE.CS_ACTION_ALLIN, MESSAGE_TYPE.CS_ACTION_ENVIDO, MESSAGE_TYPE.CS_ACTION_BET_MORE].includes(this.usersState_inCategory[users[i]].messageType)) {
+        console.log("ccccccccccccccccccccccccccc: ", i);
+        if (
+          [
+            MESSAGE_TYPE.CS_ACTION_ALLIN,
+            MESSAGE_TYPE.CS_ACTION_ENVIDO,
+            MESSAGE_TYPE.CS_ACTION_BET_MORE,
+          ].includes(this.usersState_inCategory[users[i]].messageType)
+        ) {
           winner = users[i];
           if (this.currRound === ROUNDS.BIG) {
             this.win_cards[0].user = winner;
             this.win_cards[0].cards = [...this.playerCards[winner]];
-          }
-          else if (this.currRound === ROUNDS.SMALL) {
+          } else if (this.currRound === ROUNDS.SMALL) {
             this.win_cards[1].user = winner;
             this.win_cards[1].cards = [...this.playerCards[winner]];
-          }
-          else if (this.currRound === ROUNDS.PAIRS) {
+          } else if (this.currRound === ROUNDS.PAIRS) {
             this.win_cards[2].user = winner;
             this.win_cards[2].cards = [...this.playerCards[winner]];
-          }
-          else if (this.currRound === ROUNDS.GAME) {
+          } else if (this.currRound === ROUNDS.GAME) {
             this.win_cards[3].user = winner;
             this.win_cards[3].cards = [...this.playerCards[winner]];
-          }
-          else if (this.currRound === ROUNDS.POINTS) {
+          } else if (this.currRound === ROUNDS.POINTS) {
             this.win_cards[3].user = winner;
             this.win_cards[3].cards = [...this.playerCards[winner]];
           }
@@ -1177,25 +1338,33 @@ export const FakeServer = {
         }
       }
     }
-
   },
 
   // calculate bet_coins in Category
   calcCoinInCategory() {
     let users = [];
-    if (this.currRound === ROUNDS.PAIRS || this.currRound === ROUNDS.EVAL_PAIRS) {
+    if (
+      this.currRound === ROUNDS.PAIRS ||
+      this.currRound === ROUNDS.EVAL_PAIRS
+    ) {
       users = [...this.availableUsers];
-    } else if (this.currRound === ROUNDS.GAME || this.currRound === ROUNDS.EVAL_GAME) {
+    } else if (
+      this.currRound === ROUNDS.GAME ||
+      this.currRound === ROUNDS.EVAL_GAME
+    ) {
       users = [...this.availableUsersForGame];
     } else {
       users = [0, 1, 2, 3];
     }
     let winner = this.getWinnerInCategory(users) % 2;
-    let sum = sumArray(this.bet_coins)
+    let sum = sumArray(this.bet_coins);
     if (this.stateCategory === "accept") {
       let allIn = false;
       for (let i = 0; i < users.length; i++) {
-        if (this.usersState_inCategory[users[i]].messageType === MESSAGE_TYPE.CS_ACTION_ALLIN) {
+        if (
+          this.usersState_inCategory[users[i]].messageType ===
+          MESSAGE_TYPE.CS_ACTION_ALLIN
+        ) {
           if (!this.endMission) {
             this.mission_score[winner] += 1;
             this.winner = winner;
@@ -1209,27 +1378,33 @@ export const FakeServer = {
       if (!allIn) {
         this.coins_history[this.currRound - 2][winner].end = sum;
       }
-    }
-    else if (this.stateCategory === "pass") {
+    } else if (this.stateCategory === "pass") {
       let pass = true;
       let allIn = false;
       for (let i = 0; i < users.length; i++) {
-        if (this.usersState_inCategory[users[i]].messageType !== MESSAGE_TYPE.CS_ACTION_PASS) {
+        if (
+          this.usersState_inCategory[users[i]].messageType !==
+          MESSAGE_TYPE.CS_ACTION_PASS
+        ) {
           pass = false;
         }
-        if (this.usersState_inCategory[users[i]].messageType === MESSAGE_TYPE.CS_ACTION_ALLIN) {
+        if (
+          this.usersState_inCategory[users[i]].messageType ===
+          MESSAGE_TYPE.CS_ACTION_ALLIN
+        ) {
           allIn = true;
         }
       }
       if (pass) {
-        if (this.currRound === ROUNDS.BIG || this.currRound === ROUNDS.SMALL || this.currRound === ROUNDS.POINTS)
+        if (this.currRound === ROUNDS.BIG || this.currRound === ROUNDS.SMALL)
           this.coins_history[this.currRound - 2][winner].end = 1;
         // this.total_coins[winner] += 1;
         // this.total_coins[winner + 2] += 1;
       } else {
-        this.coins_history[this.currRound - 2][winner].instant = (this.openBet < 2) ? 1 : sum;
-        this.total_coins[winner] += (this.openBet < 2) ? 1 : sum;
-        this.total_coins[winner + 2] += (this.openBet < 2) ? 1 : sum;
+        this.coins_history[this.currRound - 2][winner].instant =
+          this.openBet < 2 ? 1 : sum;
+        this.total_coins[winner] += this.openBet < 2 ? 1 : sum;
+        this.total_coins[winner + 2] += this.openBet < 2 ? 1 : sum;
         ServerCommService.send(
           MESSAGE_TYPE.SC_SEND_POINT,
           {
@@ -1242,7 +1417,10 @@ export const FakeServer = {
       }
     }
 
-    if (this.currRound === ROUNDS.EVAL_PAIRS || this.currRound === ROUNDS.PAIRS) {
+    if (
+      this.currRound === ROUNDS.EVAL_PAIRS ||
+      this.currRound === ROUNDS.PAIRS
+    ) {
       let playerPairCards = [...this.playerPairCards];
       let indexedArray;
       indexedArray = playerPairCards.map((value, index) => ({ value, index }));
@@ -1257,13 +1435,11 @@ export const FakeServer = {
             item.coin = 3;
             item.type = "(of duples)";
             this.coins_history[2][winner].play.push({ ...item });
-          }
-          else if (indexedArray[i].value.length === 3) {
+          } else if (indexedArray[i].value.length === 3) {
             item.coin = 2;
             item.type = "(of medias)";
             this.coins_history[2][winner].play.push({ ...item });
-          }
-          else if (indexedArray[i].value.length === 2) {
+          } else if (indexedArray[i].value.length === 2) {
             item.coin = 1;
             item.type = "(of pareja)";
             this.coins_history[2][winner].play.push({ ...item });
@@ -1286,8 +1462,7 @@ export const FakeServer = {
             item.coin = 3;
             item.type = "(of 31)";
             this.coins_history[3][winner].play.push({ ...item });
-          }
-          else if (indexedArray[i].value > 31) {
+          } else if (indexedArray[i].value > 31) {
             item.coin = 2;
             item.type = "(of game)";
             this.coins_history[3][winner].play.push({ ...item });
@@ -1317,15 +1492,18 @@ export const FakeServer = {
     TimeoutManager.clearNextTimeout();
     const user = params.user;
     this.stateCategory = "accept";
-    this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_ACCEPT;
+    this.usersState_inCategory[user].messageType =
+      MESSAGE_TYPE.CS_ACTION_ACCEPT;
     this.usersState_inCategory[user].coin = 0;
-    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "Accept" }, 1);
+    this.sendAlarmToAllUsers(
+      MESSAGE_TYPE.SC_DO_ALARM,
+      { user, content: "Accept" },
+      1
+    );
     if (this.isEndCategory(user)) {
       this.calcCoinInCategory();
-      if (!this.endMission)
-        this.estimateEndOfMission();
-      if (this.endMission)
-        this.currRound = ROUNDS.POINTS;
+      if (!this.endMission) this.estimateEndOfMission();
+      if (this.endMission) this.currRound = ROUNDS.POINTS;
       this.startCategory();
     }
   },
@@ -1338,13 +1516,15 @@ export const FakeServer = {
     this.stateCategory = "pass";
     this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_PASS;
     this.usersState_inCategory[user].coin = 0;
-    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "Pass" }, 1);
+    this.sendAlarmToAllUsers(
+      MESSAGE_TYPE.SC_DO_ALARM,
+      { user, content: "Pass" },
+      1
+    );
     if (this.isEndCategory(user)) {
       this.calcCoinInCategory();
-      if (!this.endMission)
-        this.estimateEndOfMission();
-      if (this.endMission)
-        this.currRound = ROUNDS.POINTS;
+      if (!this.endMission) this.estimateEndOfMission();
+      if (this.endMission) this.currRound = ROUNDS.POINTS;
       this.startCategory();
     } else {
       this.askAction(this.setNextUser(user));
@@ -1359,18 +1539,23 @@ export const FakeServer = {
     const coin = params.coin;
     this.stateCategory = "envido";
     this.envidoState = true;
-    this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_ENVIDO;
+    this.usersState_inCategory[user].messageType =
+      MESSAGE_TYPE.CS_ACTION_ENVIDO;
     this.usersState_inCategory[user].coin = coin;
     this.bet_coins[user] += coin;
     this.openBet += 1;
-    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "Envido " + ((coin > 2) ? coin : ""), coin }, 1);
+    this.sendAlarmToAllUsers(
+      MESSAGE_TYPE.SC_DO_ALARM,
+      { user, content: "Envido " + (coin > 2 ? coin : ""), coin },
+      1
+    );
     if (this.isEndCategory(user)) {
       // doesn't come in here
     } else {
       const nextUser = this.setNextUser(user);
       // if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
-        this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
-        this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
+      this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
+      this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
       // }
       this.askAction(this.setNextUser(user));
     }
@@ -1384,18 +1569,23 @@ export const FakeServer = {
     const coin = params.coin;
     this.stateCategory = "betMore";
     // this.envidoState = false;
-    this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_BET_MORE;
+    this.usersState_inCategory[user].messageType =
+      MESSAGE_TYPE.CS_ACTION_BET_MORE;
     this.usersState_inCategory[user].coin = coin;
     this.bet_coins[user] += coin;
     this.openBet += 1;
-    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: ((coin > 0) ? coin : "") + " more", coin }, 1);
+    this.sendAlarmToAllUsers(
+      MESSAGE_TYPE.SC_DO_ALARM,
+      { user, content: (coin > 0 ? coin : "") + " more", coin },
+      1
+    );
     if (this.isEndCategory(user)) {
       // doesn't come in here
     } else {
       const nextUser = this.setNextUser(user);
       // if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
-        this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
-        this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
+      this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
+      this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
       // }
       this.askAction(nextUser);
     }
@@ -1410,26 +1600,36 @@ export const FakeServer = {
     this.usersState_inCategory[user].messageType = MESSAGE_TYPE.CS_ACTION_ALLIN;
     this.usersState_inCategory[user].coin = 0;
     this.openBet += 1;
-    this.sendAlarmToAllUsers(MESSAGE_TYPE.SC_DO_ALARM, { user, content: "All In" }, 1);
+    this.sendAlarmToAllUsers(
+      MESSAGE_TYPE.SC_DO_ALARM,
+      { user, content: "All In" },
+      1
+    );
     if (this.isEndCategory(user)) {
       // doesn't come in here
     } else {
       const nextUser = this.setNextUser(user);
       // if (this.usersState_inCategory[(nextUser + 2) % 4].messageType === MESSAGE_TYPE.CS_ACTION_PASS) {
-        this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
-        this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
+      this.usersState_inCategory[(nextUser + 2) % 4].messageType = "";
+      this.usersState_inCategory[(nextUser + 2) % 4].coin = 0;
       // }
       this.askAction(this.setNextUser(user));
     }
   },
 
   nextMission() {
-    let params = { coins_history: this.coins_history, round_coins: this.round_coins, total_coins: this.total_coins, endMission: this.endMission, mission_score: this.mission_score };
+    let params = {
+      coins_history: this.coins_history,
+      round_coins: this.round_coins,
+      total_coins: this.total_coins,
+      endMission: this.endMission,
+      mission_score: this.mission_score,
+    };
     ServerCommService.send(MESSAGE_TYPE.SC_DO_END_ROUND, params, user);
     setTimeout(() => {
       this.startRound();
-    }, 15)
-  }
+    }, 15);
+  },
 };
 
 // FakeServer.initHandlers();
