@@ -1396,10 +1396,13 @@ export const FakeServer = {
         }
       }
       if (pass) {
-        if (this.currRound === ROUNDS.BIG || this.currRound === ROUNDS.SMALL)
-          this.coins_history[this.currRound - 2][winner].end = 1;
-        // this.total_coins[winner] += 1;
-        // this.total_coins[winner + 2] += 1;
+        let item = {
+          coin: 0,
+          type: "",
+        };
+        item.coin = 1;
+        item.type = "(in pass)";
+        this.coins_history[this.currRound - 2][winner].play.push({ ...item });
       } else {
         this.coins_history[this.currRound - 2][winner].instant =
           this.openBet < 2 ? 1 : sum;
@@ -1464,7 +1467,7 @@ export const FakeServer = {
             this.coins_history[3][winner].play.push({ ...item });
           } else if (indexedArray[i].value > 31) {
             item.coin = 2;
-            item.type = "(of game)";
+            item.type = "(of others)";
             this.coins_history[3][winner].play.push({ ...item });
           }
         }
@@ -1476,7 +1479,7 @@ export const FakeServer = {
         type: "",
       };
       item.coin = 1;
-      item.type = "(of points)";
+      item.type = "(Punto)";
       this.coins_history[4][winner].play.push({ ...item });
     }
 
