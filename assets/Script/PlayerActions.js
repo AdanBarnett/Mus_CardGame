@@ -16,6 +16,8 @@ export default cc.Class({
     _currentUser: -1,
     _discard: false,
     _timer: -1,
+
+    // time: [],
   },
 
   onLoad() {},
